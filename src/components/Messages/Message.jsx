@@ -1,16 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import copy from 'copy-to-clipboard';
-import SubRow from './Content/SubRow';
-import Content from './Content/Content';
-import MultiMessage from './MultiMessage';
-import HoverButtons from './HoverButtons';
-import SiblingSwitch from './SiblingSwitch';
-import getIcon from '~/utils/getIcon';
-import { useMessageHandler } from '~/utils/handleSubmit';
-import { useGetConversationByIdQuery } from '~/data-provider';
-import { cn } from '~/utils/';
-import store from '~/store';
+import { useState, useEffect, useRef } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import copy from "copy-to-clipboard";
+import SubRow from "./Content/SubRow";
+import Content from "./Content/Content";
+import MultiMessage from "./MultiMessage";
+import HoverButtons from "./HoverButtons";
+import SiblingSwitch from "./SiblingSwitch";
+import getIcon from "~/utils/getIcon";
+import { useMessageHandler } from "~/utils/handleSubmit";
+import { cn } from "~/utils/";
+import store from "~/store";
 
 function isJson(str) {
   try {
@@ -29,9 +28,18 @@ export default function Message({
   setCurrentEditId,
   siblingIdx,
   siblingCount,
-  setSiblingIdx
+  setSiblingIdx,
 }) {
-  const { text, searchResult, isCreatedByUser, error, submitting, unfinished } = message;
+  const {
+    query: text,
+    answer,
+    searchResult,
+    error,
+    submitting,
+    unfinished,
+  } = message;
+  let isCreatedByUser = !!text;
+
   const isSubmitting = useRecoilValue(store.isSubmitting);
   const setLatestMessage = useSetRecoilState(store.latestMessage);
   const [abortScroll, setAbort] = useState(false);
@@ -39,11 +47,8 @@ export default function Message({
   const last = !message?.children?.length;
   const edit = message.messageId == currentEditId;
   const { ask, regenerate } = useMessageHandler();
-  const { switchToConversation } = store.useConversation();
+
   const blinker = submitting && isSubmitting;
-  const getConversationQuery = useGetConversationByIdQuery(message.conversationId, {
-    enabled: false
-  });
 
   // debugging
   // useEffect(() => {
@@ -63,7 +68,8 @@ export default function Message({
     }
   }, [last, message]);
 
-  const enterEdit = (cancel) => setCurrentEditId(cancel ? -1 : message.messageId);
+  const enterEdit = (cancel) =>
+    setCurrentEditId(cancel ? -1 : message.messageId);
 
   const handleWheel = () => {
     if (blinker) {
@@ -74,14 +80,14 @@ export default function Message({
   };
 
   const getError = (text) => {
-    const errorMessage = text.length > 512 ? text.slice(0, 512) + '...' : text;
+    const errorMessage = text.length > 512 ? text.slice(0, 512) + "..." : text;
     const match = text.match(/\{[^{}]*\}/);
-    var json = match ? match[0] : '';
+    var json = match ? match[0] : "";
     if (isJson(json)) {
       json = JSON.parse(json);
-      if (json.code === 'invalid_api_key') {
-        return 'Invalid API key. Please check your API key and try again. You can access your API key by clicking on the model logo in the top-left corner of the textbox.';
-      } else if (json.type === 'insufficient_quota') {
+      if (json.code === "invalid_api_key") {
+        return "Invalid API key. Please check your API key and try again. You can access your API key by clicking on the model logo in the top-left corner of the textbox.";
+      } else if (json.type === "insufficient_quota") {
         return "We're sorry, but the default API key has reached its limit. To continue using this service, please set up your own API key. You can do this by clicking on the model logo in the top-left corner of the textbox.";
       } else {
         return `Oops! Something went wrong. Please try again in a few moments. Here's the specific error message we encountered: ${errorMessage}`;
@@ -93,21 +99,21 @@ export default function Message({
 
   const props = {
     className:
-      'w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 bg-white dark:text-gray-100 group dark:bg-gray-800'
+      "w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 bg-white dark:text-gray-100 group dark:bg-gray-800",
   };
 
   const icon = getIcon({
     ...conversation,
-    ...message
+    ...message,
   });
 
   if (!isCreatedByUser)
     props.className =
-      'w-full border-b border-black/10 bg-gray-50 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group bg-gray-100 dark:bg-[#444654]';
+      "w-full border-b border-black/10 bg-gray-50 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group bg-gray-100 dark:bg-[#444654]";
 
   if (message.bg && searchResult) {
-    props.className = message.bg.split('hover')[0];
-    props.titleclass = message.bg.split(props.className)[1] + ' cursor-pointer';
+    props.className = message.bg.split("hover")[0];
+    props.titleclass = message.bg.split(props.className)[1] + " cursor-pointer";
   }
 
   const resubmitMessage = () => {
@@ -116,7 +122,7 @@ export default function Message({
     ask({
       text,
       parentMessageId: message?.parentMessageId,
-      conversationId: message?.conversationId
+      conversationId: message?.conversationId,
     });
 
     setSiblingIdx(siblingCount - 1);
@@ -136,20 +142,15 @@ export default function Message({
     }, 3000);
   };
 
-  const clickSearchResult = async () => {
-    if (!searchResult) return;
-    getConversationQuery.refetch(message.conversationId).then((response) => {
-      switchToConversation(response.data);
-    });
-  };
-
   return (
     <>
       <div {...props} onWheel={handleWheel}>
         <div className="relative m-auto flex gap-4 p-4 text-base md:max-w-2xl md:gap-6 md:py-6 lg:max-w-2xl lg:px-0 xl:max-w-3xl">
           <div className="relative flex h-[30px] w-[30px] flex-col items-end text-right text-xs md:text-sm">
-            {typeof icon === 'string' && icon.match(/[^\\x00-\\x7F]+/) ? (
-              <span className=" direction-rtl w-40 overflow-x-scroll">{icon}</span>
+            {typeof icon === "string" && icon.match(/[^\\x00-\\x7F]+/) ? (
+              <span className=" direction-rtl w-40 overflow-x-scroll">
+                {icon}
+              </span>
             ) : (
               icon
             )}
@@ -162,15 +163,6 @@ export default function Message({
             </div>
           </div>
           <div className="relative flex w-[calc(100%-50px)] flex-col gap-1  md:gap-3 lg:w-[calc(100%-115px)]">
-            {searchResult && (
-              <SubRow
-                classes={props.titleclass + ' rounded'}
-                subclasses="switch-result pl-2 pb-2"
-                onClick={clickSearchResult}
-              >
-                <strong>{`${message.title} | ${message.sender}`}</strong>
-              </SubRow>
-            )}
             <div className="flex flex-grow flex-col gap-3">
               {error ? (
                 <div className="flex flex min-h-[20px] flex-grow flex-col items-start gap-2 gap-4  text-red-500">
@@ -197,7 +189,10 @@ export default function Message({
                     >
                       Save & Submit
                     </button>
-                    <button className="btn btn-neutral relative" onClick={() => enterEdit(true)}>
+                    <button
+                      className="btn btn-neutral relative"
+                      onClick={() => enterEdit(true)}
+                    >
                       Cancel
                     </button>
                   </div>
@@ -206,19 +201,13 @@ export default function Message({
                 <>
                   <div
                     className={cn(
-                      'flex min-h-[20px] flex-grow flex-col items-start gap-4 ',
-                      isCreatedByUser ? 'whitespace-pre-wrap' : ''
+                      "flex min-h-[20px] flex-grow flex-col items-start gap-4 ",
+                      isCreatedByUser ? "whitespace-pre-wrap" : ""
                     )}
                   >
                     {/* <div className={`${blinker ? 'result-streaming' : ''} markdown prose dark:prose-invert light w-full break-words`}> */}
                     <div className="markdown prose dark:prose-invert light w-full break-words">
-                      {!isCreatedByUser ? (
-                        <>
-                          <Content content={text} />
-                        </>
-                      ) : (
-                        <>{text}</>
-                      )}
+                      <Content content={text} />
                     </div>
                   </div>
                   {/* {!isSubmitting && cancelled ? (
@@ -260,7 +249,7 @@ export default function Message({
       <MultiMessage
         messageId={message.messageId}
         conversation={conversation}
-        messagesTree={message.children}
+        messagesTree={message}
         scrollToBottom={scrollToBottom}
         currentEditId={currentEditId}
         setCurrentEditId={setCurrentEditId}

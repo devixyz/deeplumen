@@ -1,14 +1,18 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+/*
+ * @Description:
+ * @Author: Devin
+ * @Date: 2025-02-20 15:30:07
+ */
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   RecoilRoot,
   atom,
   selector,
   useRecoilState,
   useRecoilValue,
-  useSetRecoilState
-} from 'recoil';
-import buildTree from '~/utils/buildTree';
+  useSetRecoilState,
+} from "recoil";
 
 // current submission
 // submit any new value to this state will cause new message to be send.
@@ -22,16 +26,16 @@ import buildTree from '~/utils/buildTree';
 // }
 
 const submission = atom({
-  key: 'submission',
-  default: null
+  key: "submission",
+  default: null,
 });
 
 const isSubmitting = atom({
-  key: 'isSubmitting',
-  default: false
+  key: "isSubmitting",
+  default: false,
 });
 
 export default {
   submission,
-  isSubmitting
+  isSubmitting,
 };

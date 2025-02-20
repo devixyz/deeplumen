@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import Message from './Message';
+import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import Message from "./Message";
 
-import store from '~/store';
+import store from "~/store";
 
 export default function MultiMessage({
   messageId,
@@ -11,11 +11,14 @@ export default function MultiMessage({
   scrollToBottom,
   currentEditId,
   setCurrentEditId,
-  isSearchView
 }) {
   // const [siblingIdx, setSiblingIdx] = useState(0);
 
-  const [siblingIdx, setSiblingIdx] = useRecoilState(store.messagesSiblingIdxFamily(messageId));
+  const [siblingIdx, setSiblingIdx] = useRecoilState(
+    store.messagesSiblingIdxFamily(messageId)
+  );
+
+  console.log(`siblingIdx`, siblingIdx);
 
   const setSiblingIdxRev = (value) => {
     setSiblingIdx(messagesTree?.length - value - 1);
@@ -37,26 +40,7 @@ export default function MultiMessage({
   }
 
   const message = messagesTree[messagesTree.length - siblingIdx - 1];
-  if (isSearchView)
-    return (
-      <>
-        {messagesTree
-          ? messagesTree.map((message) => (
-            <Message
-              key={message.messageId}
-              conversation={conversation}
-              message={message}
-              scrollToBottom={scrollToBottom}
-              currentEditId={currentEditId}
-              setCurrentEditId={null}
-              siblingIdx={1}
-              siblingCount={1}
-              setSiblingIdx={null}
-            />
-          ))
-          : null}
-      </>
-    );
+
   return (
     <Message
       key={message.messageId}

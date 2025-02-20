@@ -1,17 +1,17 @@
-import { useState, useEffect, useRef, useContext } from 'react';
-import NewChat from './NewChat';
-import Panel from '../svg/Panel';
-import Spinner from '../svg/Spinner';
-import Pages from '../Conversations/Pages';
-import Conversations from '../Conversations';
-import NavLinks from './NavLinks';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useGetConversationsQuery, useSearchQuery } from '~/data-provider';
-import useDebounce from '~/hooks/useDebounce';
-import store from '~/store';
-import { useAuthContext } from '~/hooks/AuthContext';
-import { ThemeContext } from '~/hooks/ThemeContext';
-import { cn } from '~/utils/';
+import { useState, useEffect, useRef, useContext } from "react";
+import NewChat from "./NewChat";
+import Panel from "../svg/Panel";
+import Spinner from "../svg/Spinner";
+import Pages from "../Conversations/Pages";
+import Conversations from "../Conversations";
+import NavLinks from "./NavLinks";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useGetConversationsQuery } from "~/data-provider";
+import useDebounce from "~/hooks/useDebounce";
+import store from "~/store";
+import { useAuthContext } from "~/hooks/AuthContext";
+import { ThemeContext } from "~/hooks/ThemeContext";
+import { cn } from "~/utils/";
 
 // import resolveConfig from 'tailwindcss/resolveConfig';
 // const tailwindConfig = import('../../../tailwind.config.cjs');
@@ -36,41 +36,31 @@ import { cn } from '~/utils/';
 export default function Nav({ navVisible, setNavVisible }) {
   const [isHovering, setIsHovering] = useState(false);
   const { isAuthenticated } = useAuthContext();
-  const { theme, } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const containerRef = useRef(null);
   const scrollPositionRef = useRef(null);
 
   const [conversations, setConversations] = useState([]);
   // current page
-  const [pageNumber, setPageNumber] = useState(1);
-  // total pages
-  const [pages, setPages] = useState(1);
+  const [limit, setLimit] = useState(10);
 
   // data provider
-  const getConversationsQuery = useGetConversationsQuery(pageNumber, { enabled: isAuthenticated });
+  const getConversationsQuery = useGetConversationsQuery("abc-123", limit, {
+    enabled: true || isAuthenticated,
+  }); // todo
 
-  const { newConversation, searchPlaceholderConversation } = store.useConversation();
+  const { newConversation, searchPlaceholderConversation } =
+    store.useConversation();
 
   // current conversation
   const conversation = useRecoilValue(store.conversation);
   const { conversationId } = conversation || {};
-  const setSearchResultMessages = useSetRecoilState(store.searchResultMessages);
-  const refreshConversationsHint = useRecoilValue(store.refreshConversationsHint);
+  const refreshConversationsHint = useRecoilValue(
+    store.refreshConversationsHint
+  );
   const { refreshConversations } = store.useConversations();
 
   const [isFetching, setIsFetching] = useState(false);
-
-  
-
-
-
-  const clearSearch = () => {
-    setPageNumber(1);
-    refreshConversations();
-    if (conversationId == 'search') {
-      newConversation();
-    }
-  };
 
   const moveToTop = () => {
     const container = containerRef.current;
@@ -79,33 +69,17 @@ export default function Nav({ navVisible, setNavVisible }) {
     }
   };
 
-  const nextPage = async () => {
-    moveToTop();
-    setPageNumber(pageNumber + 1);
-  };
-
-  const previousPage = async () => {
-    moveToTop();
-    setPageNumber(pageNumber - 1);
-  };
-
   useEffect(() => {
     if (getConversationsQuery.data) {
-
-      let { conversations, pages } = getConversationsQuery.data;
-      if (pageNumber > pages) {
-        setPageNumber(pages);
-      } else {
-  
-        setConversations(conversations);
-        setPages(pages);
-      }
+      let { data: conversations } = getConversationsQuery.data;
+      console.log(getConversationsQuery, "conversations");
+      setConversations(conversations);
     }
-  }, [getConversationsQuery.isSuccess, getConversationsQuery.data, pageNumber]);
+  }, [getConversationsQuery.isSuccess, getConversationsQuery.data]);
 
   useEffect(() => {
-      getConversationsQuery.refetch()
-  }, [pageNumber, conversationId, refreshConversationsHint]);
+    getConversationsQuery.refetch();
+  }, [conversationId, refreshConversationsHint]);
 
   const toggleNavVisible = () => {
     setNavVisible((prev) => !prev);
@@ -121,8 +95,10 @@ export default function Nav({ navVisible, setNavVisible }) {
   // }, [conversationId, setNavVisible]);
 
   const isMobile = () => {
-    const userAgent = typeof window.navigator === 'undefined' ? '' : navigator.userAgent;
-    const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i;
+    const userAgent =
+      typeof window.navigator === "undefined" ? "" : navigator.userAgent;
+    const mobileRegex =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i;
     return mobileRegex.test(userAgent);
   };
 
@@ -134,30 +110,33 @@ export default function Nav({ navVisible, setNavVisible }) {
     }
   }, [conversationId, setNavVisible]);
 
-  const containerClasses =
-    getConversationsQuery.isLoading && pageNumber === 1
-      ? 'flex flex-col gap-2 text-gray-100 text-sm h-full justify-center items-center'
-      : 'flex flex-col gap-2 text-gray-100 text-sm';
+  const containerClasses = getConversationsQuery.isLoading
+    ? "flex flex-col gap-2 text-gray-100 text-sm h-full justify-center items-center"
+    : "flex flex-col gap-2 text-gray-100 text-sm";
 
   return (
     <>
-      <div className={'nav dark:bg-gray-900 md:inset-y-0' + (navVisible ? ' active' : '')}>
+      <div
+        className={
+          "nav dark:bg-gray-900 md:inset-y-0" + (navVisible ? " active" : "")
+        }
+      >
         <div className="flex h-full min-h-0 flex-col ">
           <div className="scrollbar-trigger relative flex h-full w-full flex-1 items-start dark:border-white/20 border-r border-gray-200 dark:border-gray-700">
             <nav className="relative flex h-full flex-1 flex-col space-y-1">
               <div className="p-2">
-               <NewChat />
+                <NewChat />
               </div>
               <div
                 className={`flex-1 p-2 flex-col overflow-y-auto ${
-                  isHovering ? '' : 'scrollbar-transparent'
+                  isHovering ? "" : "scrollbar-transparent"
                 } border-b dark:border-white/20`}
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
                 ref={containerRef}
               >
                 <div className={containerClasses}>
-                  {(getConversationsQuery.isLoading && pageNumber === 1) || isFetching ? (
+                  {getConversationsQuery.isLoading || isFetching ? (
                     <Spinner />
                   ) : (
                     <Conversations
@@ -166,27 +145,32 @@ export default function Nav({ navVisible, setNavVisible }) {
                       moveToTop={moveToTop}
                     />
                   )}
-                  <Pages
+                  {/* <Pages
                     pageNumber={pageNumber}
                     pages={pages}
                     nextPage={nextPage}
                     previousPage={previousPage}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="p-1">
-                 <NavLinks  />
+                <NavLinks />
               </div>
             </nav>
           </div>
         </div>
         <button
           type="button"
-          className={cn('nav-close-button -ml-0.5 -mt-2.5 inline-flex h-10 w-10 items-center justify-center rounded-md focus:outline-none focus:ring-white md:-ml-1 md:-mt-2.5', theme === 'dark' ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-500')}
+          className={cn(
+            "nav-close-button -ml-0.5 -mt-2.5 inline-flex h-10 w-10 items-center justify-center rounded-md focus:outline-none focus:ring-white md:-ml-1 md:-mt-2.5",
+            theme === "dark"
+              ? "text-gray-500 hover:text-gray-400"
+              : "text-gray-400 hover:text-gray-500"
+          )}
           onClick={toggleNavVisible}
         >
           <span className="sr-only">Close sidebar</span>
-          <Panel/>
+          <Panel />
         </button>
       </div>
       {!navVisible && (
@@ -196,11 +180,14 @@ export default function Nav({ navVisible, setNavVisible }) {
           onClick={toggleNavVisible}
         >
           <span className="sr-only">Open sidebar</span>
-          <Panel open={true}/>
+          <Panel open={true} />
         </button>
       )}
 
-      <div className={'nav-mask' + (navVisible ? ' active' : '')} onClick={toggleNavVisible}></div>
+      <div
+        className={"nav-mask" + (navVisible ? " active" : "")}
+        onClick={toggleNavVisible}
+      ></div>
     </>
   );
 }

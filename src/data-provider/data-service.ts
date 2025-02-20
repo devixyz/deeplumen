@@ -1,9 +1,12 @@
-import * as t from './types';
-import request from './request';
-import * as endpoints from './api-endpoints';
+import * as t from "./types";
+import request from "./request";
+import * as endpoints from "./api-endpoints";
 
-export function getConversations(pageNumber: string): Promise<t.TGetConversationsResponse> {
-  return request.get(endpoints.conversations(pageNumber));
+export function getConversations(
+  user: string,
+  limit: string
+): Promise<t.TGetConversationsResponse> {
+  return request.get(endpoints.conversations(user, limit));
 }
 
 export function abortRequestWithMessage(
@@ -11,7 +14,9 @@ export function abortRequestWithMessage(
   abortKey: string,
   message: string
 ): Promise<void> {
-  return request.post(endpoints.abortRequest(endpoint), { arg: { abortKey, message } });
+  return request.post(endpoints.abortRequest(endpoint), {
+    arg: { abortKey, message },
+  });
 }
 
 export function deleteConversation(payload: t.TDeleteConversationRequest) {
@@ -53,20 +58,9 @@ export function deletePreset(arg: t.TPreset | {}): Promise<t.TPreset[]> {
   return request.post(endpoints.deletePreset(), arg);
 }
 
-
-
 export function getUser(): Promise<t.TUser> {
   return request.get(endpoints.user());
 }
-
-export const searchConversations = async (
-  q: string,
-  pageNumber: string
-): Promise<t.TSearchResults> => {
-  return request.get(endpoints.search(q, pageNumber));
-};
-
-
 
 export const updateTokenCount = (text: string) => {
   return request.post(endpoints.tokenizer(), { arg: text });

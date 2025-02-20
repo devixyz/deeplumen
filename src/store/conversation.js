@@ -1,15 +1,13 @@
-import endpoints from './endpoints';
+import endpoints from "./endpoints";
 import {
   atom,
   selector,
   atomFamily,
   useSetRecoilState,
   useResetRecoilState,
-  useRecoilCallback
-} from 'recoil';
-import buildTree from '~/utils/buildTree';
-import getDefaultConversation from '~/utils/getDefaultConversation';
-import submission from './submission.js';
+  useRecoilCallback,
+} from "recoil";
+import submission from "./submission.js";
 
 // current conversation, can be null (need to be fetched from server)
 // sample structure
@@ -40,33 +38,26 @@ import submission from './submission.js';
 // };
 
 const conversation = atom({
-  key: 'conversation',
-  default: null
+  key: "conversation",
+  default: null,
 });
 
 // current messages of the conversation, must be an array
 // sample structure
 // [{text, sender, messageId, parentMessageId, isCreatedByUser}]
 const messages = atom({
-  key: 'messages',
-  default: []
-});
-
-const messagesTree = selector({
-  key: 'messagesTree',
-  get: ({ get }) => {
-    return buildTree(get(messages), false);
-  }
+  key: "messages",
+  default: [],
 });
 
 const latestMessage = atom({
-  key: 'latestMessage',
-  default: null
+  key: "latestMessage",
+  default: null,
 });
 
 const messagesSiblingIdxFamily = atomFamily({
-  key: 'messagesSiblingIdx',
-  default: 0
+  key: "messagesSiblingIdx",
+  default: 0,
 });
 
 const useConversation = () => {
@@ -76,35 +67,15 @@ const useConversation = () => {
   const resetLatestMessage = useResetRecoilState(latestMessage);
 
   const switchToConversation = useRecoilCallback(
-    ({ snapshot }) =>
-      async (_conversation, messages = null, preset = null) => {
-        const prevConversation = await snapshot.getPromise(conversation);
-        const endpointsConfig = await snapshot.getPromise(endpoints.endpointsConfig);
-        _switchToConversation(_conversation, messages, preset, {
-          endpointsConfig,
-          prevConversation
-        });
+    ({}) =>
+      async (_conversation, messages = null) => {
+        _switchToConversation(_conversation, messages);
       },
     []
   );
 
-  const _switchToConversation = (
-    conversation,
-    messages = null,
-    preset = null,
-    { endpointsConfig = {}, prevConversation = {} }
-  ) => {
-    let { endpoint = null } = conversation;
-
-    if (endpoint === null)
-      // get the default model
-      conversation = getDefaultConversation({
-        conversation,
-        endpointsConfig,
-        prevConversation,
-        preset
-      });
-
+  const _switchToConversation = (conversation, messages = null) => {
+    console.log(conversation, "conversation", messages);
     setConversation(conversation);
     setMessages(messages);
     setSubmission({});
@@ -112,35 +83,27 @@ const useConversation = () => {
   };
 
   const newConversation = (template = {}, preset) => {
+    console.log("123");
     switchToConversation(
       {
-        conversationId: 'new',
-        title: 'New Chat',
-        ...template
-      },
-      [],
-      preset
-    );
-  };
-
-  const searchPlaceholderConversation = () => {
-    switchToConversation(
-      {
-        conversationId: 'search',
-        title: 'Search'
+        id: "new",
+        title: "New Chat",
+        ...template,
       },
       []
     );
   };
 
-  return { newConversation, switchToConversation, searchPlaceholderConversation };
+  return {
+    newConversation,
+    switchToConversation,
+  };
 };
 
 export default {
   conversation,
   messages,
-  messagesTree,
   latestMessage,
   messagesSiblingIdxFamily,
-  useConversation
+  useConversation,
 };

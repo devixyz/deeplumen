@@ -1,28 +1,27 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { useRecoilValue } from 'recoil';
-import Spinner from '../svg/Spinner';
-import throttle from 'lodash/throttle';
-import { CSSTransition } from 'react-transition-group';
-import ScrollToBottom from './ScrollToBottom';
-import MultiMessage from './MultiMessage';
-import MessageHeader from './MessageHeader';
-import { useScreenshot } from '~/utils/screenshotContext.jsx';
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useRecoilValue } from "recoil";
+import Spinner from "../svg/Spinner";
+import throttle from "lodash/throttle";
+import { CSSTransition } from "react-transition-group";
+import ScrollToBottom from "./ScrollToBottom";
+import MultiMessage from "./MultiMessage";
+import MessageHeader from "./MessageHeader";
+import { useScreenshot } from "~/utils/screenshotContext.jsx";
 
-import store from '~/store';
+import store from "~/store";
 
-export default function Messages({ isSearchView = false }) {
+export default function Messages({}) {
   const [currentEditId, setCurrentEditId] = useState(-1);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const scrollableRef = useRef(null);
   const messagesEndRef = useRef(null);
 
-  const messagesTree = useRecoilValue(store.messagesTree);
-  const searchResultMessagesTree = useRecoilValue(store.searchResultMessagesTree);
+  const _messagesTree = useRecoilValue(store.messages) || {};
 
-  const _messagesTree = isSearchView ? searchResultMessagesTree : messagesTree;
+  console.log(_messagesTree, "_messagesTree");
 
   const conversation = useRecoilValue(store.conversation) || {};
-  const { conversationId } = conversation;
+  const { id: conversationId } = conversation;
 
   const { screenshotTargetRef } = useScreenshot();
 
@@ -39,18 +38,18 @@ export default function Messages({ isSearchView = false }) {
     }, 650);
 
     // Add a listener on the window object
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
       clearTimeout(timeoutId);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
-  }, [_messagesTree]);
+  }, []);
 
   const scrollToBottom = useCallback(
     throttle(
       () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
         setShowScrollButton(false);
       },
       750,
@@ -87,12 +86,15 @@ export default function Messages({ isSearchView = false }) {
       ref={scrollableRef}
       onScroll={debouncedHandleScroll}
     >
-      <div className="dark:gpt-dark-gray mb-32 h-auto md:mb-48" ref={screenshotTargetRef}>
+      <div
+        className="dark:gpt-dark-gray mb-32 h-auto md:mb-48"
+        ref={screenshotTargetRef}
+      >
         <div className="dark:gpt-dark-gray flex h-auto flex-col items-center text-sm">
-          <MessageHeader isSearchView={isSearchView} />
+          <MessageHeader />
           {_messagesTree === null ? (
             <Spinner />
-          ) : _messagesTree?.length == 0 && isSearchView ? (
+          ) : _messagesTree?.length == 0 ? (
             <div className="flex w-full items-center justify-center gap-1 bg-gray-50 p-3 text-sm text-gray-500 dark:border-gray-900/50 dark:bg-gray-800 dark:text-gray-300">
               Nothing found
             </div>
@@ -106,7 +108,6 @@ export default function Messages({ isSearchView = false }) {
                 scrollToBottom={scrollToBottom}
                 currentEditId={currentEditId}
                 setCurrentEditId={setCurrentEditId}
-                isSearchView={isSearchView}
               />
               <CSSTransition
                 in={showScrollButton}
@@ -115,7 +116,11 @@ export default function Messages({ isSearchView = false }) {
                 unmountOnExit={false}
                 // appear
               >
-                {() => showScrollButton && <ScrollToBottom scrollHandler={scrollHandler} />}
+                {() =>
+                  showScrollButton && (
+                    <ScrollToBottom scrollHandler={scrollHandler} />
+                  )
+                }
               </CSSTransition>
             </>
           )}

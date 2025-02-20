@@ -1,12 +1,16 @@
-import conversation from './conversation';
-import conversations from './conversations';
-import endpoints from './endpoints';
-import user from './user';
-import text from './text';
-import submission from './submission';
-import search from './search';
-import preset from './preset';
-import token from './token';
+/*
+ * @Description:
+ * @Author: Devin
+ * @Date: 2025-02-20 15:30:07
+ */
+import conversation from "./conversation";
+import conversations from "./conversations";
+import endpoints from "./endpoints";
+import user from "./user";
+import text from "./text";
+import submission from "./submission";
+import preset from "./preset";
+import token from "./token";
 
 export default {
   ...conversation,
@@ -15,7 +19,6 @@ export default {
   ...user,
   ...text,
   ...submission,
-  ...search,
   ...preset,
-  ...token
+  ...token,
 };

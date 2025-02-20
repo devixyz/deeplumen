@@ -1,12 +1,22 @@
-import { useEffect } from 'react';
-import TrashIcon from '../svg/TrashIcon';
-import CrossIcon from '../svg/CrossIcon';
-import { useRecoilValue } from 'recoil';
-import { useDeleteConversationMutation } from '~/data-provider';
+/*
+ * @Description:
+ * @Author: Devin
+ * @Date: 2025-02-20 15:30:07
+ */
+import { useEffect } from "react";
+import TrashIcon from "../svg/TrashIcon";
+import CrossIcon from "../svg/CrossIcon";
+import { useRecoilValue } from "recoil";
+import { useDeleteConversationMutation } from "~/data-provider";
 
-import store from '~/store';
+import store from "~/store";
 
-export default function DeleteButton({ conversationId, renaming, cancelHandler, retainView }) {
+export default function DeleteButton({
+  conversationId,
+  renaming,
+  cancelHandler,
+  retainView,
+}) {
   const currentConversation = useRecoilValue(store.conversation) || {};
   const { newConversation } = store.useConversation();
   const { refreshConversations } = store.useConversations();
@@ -15,7 +25,8 @@ export default function DeleteButton({ conversationId, renaming, cancelHandler, 
 
   useEffect(() => {
     if (deleteConvoMutation.isSuccess) {
-      if (currentConversation?.conversationId == conversationId) newConversation();
+      if (currentConversation?.conversationId == conversationId)
+        newConversation();
 
       refreshConversations();
       retainView();
@@ -23,13 +34,16 @@ export default function DeleteButton({ conversationId, renaming, cancelHandler, 
   }, [deleteConvoMutation.isSuccess]);
 
   const clickHandler = () => {
-    deleteConvoMutation.mutate({ conversationId, source: 'button' });
+    deleteConvoMutation.mutate({ conversationId, source: "button" });
   };
 
   const handler = renaming ? cancelHandler : clickHandler;
 
   return (
-    <button className="p-1 hover:text-white" onClick={handler}>
+    <button
+      className="p-1 hover:text-gray-700 dark:hover:text-gray-200"
+      onClick={handler}
+    >
       {renaming ? <CrossIcon /> : <TrashIcon />}
     </button>
   );

@@ -1,30 +1,34 @@
-import { useState, useRef, useEffect } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { useUpdateConversationMutation } from '~/data-provider';
-import RenameButton from './RenameButton';
-import DeleteButton from './DeleteButton';
-import ConvoIcon from '../svg/ConvoIcon';
+import { useState, useRef, useEffect } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { useUpdateConversationMutation } from "~/data-provider";
+import RenameButton from "./RenameButton";
+import DeleteButton from "./DeleteButton";
+import ConvoIcon from "../svg/ConvoIcon";
 
-import store from '~/store';
+import store from "~/store";
 
 export default function Conversation({ conversation, retainView }) {
-  const [currentConversation, setCurrentConversation] = useRecoilState(store.conversation);
+  const [currentConversation, setCurrentConversation] = useRecoilState(
+    store.conversation
+  );
   const setSubmission = useSetRecoilState(store.submission);
 
   const { refreshConversations } = store.useConversations();
   const { switchToConversation } = store.useConversation();
 
-  const updateConvoMutation = useUpdateConversationMutation(currentConversation?.conversationId);
+  const updateConvoMutation = useUpdateConversationMutation(
+    currentConversation?.id
+  );
 
   const [renaming, setRenaming] = useState(false);
   const inputRef = useRef(null);
 
-  const { conversationId, title } = conversation;
+  const { id: conversationId, name: title } = conversation;
 
   const [titleInput, setTitleInput] = useState(title);
 
   const clickHandler = async () => {
-    if (currentConversation?.conversationId === conversationId) {
+    if (currentConversation?.id === conversationId) {
       return;
     }
 
@@ -64,35 +68,37 @@ export default function Conversation({ conversation, retainView }) {
   useEffect(() => {
     if (updateConvoMutation.isSuccess) {
       refreshConversations();
-      if (conversationId == currentConversation?.conversationId) {
+      if (conversationId == currentConversation?.id) {
         setCurrentConversation((prevState) => ({
           ...prevState,
-          title: titleInput
+          title: titleInput,
         }));
       }
     }
   }, [updateConvoMutation.isSuccess]);
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       onRename(e);
     }
   };
 
   const aProps = {
     className:
-      'animate-flash group relative flex cursor-pointer items-center gap-3 break-all rounded-md bg-gray-800 py-3 px-3 pr-14 hover:bg-gray-800'
+      "bg-gray-50 py-1 dark:bg-white/5 animate-flash group relative flex cursor-pointer items-center gap-3 break-all rounded-md  py-3 px-3 pr-14 text-black dark:text-white bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-800",
   };
 
   if (currentConversation?.conversationId !== conversationId) {
     aProps.className =
-      'group relative flex cursor-pointer items-center gap-3 break-all rounded-md py-3 px-3 hover:bg-[#2A2B32] hover:pr-4';
+      "bg-gray-50 py-1 dark:bg-white/5 text-black dark:text-white group relative flex cursor-pointer items-center gap-3 break-all rounded-md py-3 px-3 bg-gray-200 hover:bg-gray-200 dark:hover:bg-[#2A2B32]";
   }
 
   return (
     <a onClick={() => clickHandler()} {...aProps}>
       <ConvoIcon />
-      <div className="relative max-h-5 flex-1 overflow-hidden text-ellipsis break-all">
+      <div
+        className={`relative max-h-5 flex-1 overflow-hidden text-ellipsis break-all line-clamp-1 ${currentConversation?.id === conversationId && "pr-6"}`}
+      >
         {renaming === true ? (
           <input
             ref={inputRef}
@@ -107,14 +113,14 @@ export default function Conversation({ conversation, retainView }) {
           title
         )}
       </div>
-      {currentConversation?.conversationId === conversationId ? (
-        <div className="visible absolute right-1 z-10 flex text-gray-300">
-          <RenameButton
+      {currentConversation?.id === conversationId ? (
+        <div className="visible absolute right-1 z-10 flex">
+          {/* <RenameButton
             conversationId={conversationId}
             renaming={renaming}
             renameHandler={renameHandler}
             onRename={onRename}
-          />
+          /> */}
           <DeleteButton
             conversationId={conversationId}
             renaming={renaming}
@@ -123,7 +129,8 @@ export default function Conversation({ conversation, retainView }) {
           />
         </div>
       ) : (
-        <div className="absolute inset-y-0 right-0 z-10 w-8 rounded-r-md bg-gradient-to-l from-gray-900 group-hover:from-[#2A2B32]" />
+        <div></div>
+        // <div className="absolute inset-y-0 right-0 z-10 w-8 rounded-r-md bg-gradient-to-l from-gray-900 group-hover:from-[#2A2B32]" />
       )}
     </a>
   );
