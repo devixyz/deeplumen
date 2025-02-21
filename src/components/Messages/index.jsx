@@ -7,10 +7,11 @@ import ScrollToBottom from "./ScrollToBottom";
 import MultiMessage from "./MultiMessage";
 import MessageHeader from "./MessageHeader";
 import { useScreenshot } from "~/utils/screenshotContext.jsx";
+import AiTools from "~/components/aiTools";
 
 import store from "~/store";
 
-export default function Messages({}) {
+export default function Messages({ appChatListData, currentConversationId }) {
   const [currentEditId, setCurrentEditId] = useState(-1);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const scrollableRef = useRef(null);
@@ -86,50 +87,23 @@ export default function Messages({}) {
       ref={scrollableRef}
       onScroll={debouncedHandleScroll}
     >
-      <div
+      <AiTools
+        appChatListData={appChatListData}
+        currentConversationId={currentConversationId}
+      ></AiTools>
+      {/* <div
         className="dark:gpt-dark-gray mb-32 h-auto md:mb-48"
         ref={screenshotTargetRef}
       >
+        <AiTools></AiTools>
         <div className="dark:gpt-dark-gray flex h-auto flex-col items-center text-sm">
-          <MessageHeader />
-          {_messagesTree === null ? (
-            <Spinner />
-          ) : _messagesTree?.length == 0 ? (
-            <div className="flex w-full items-center justify-center gap-1 bg-gray-50 p-3 text-sm text-gray-500 dark:border-gray-900/50 dark:bg-gray-800 dark:text-gray-300">
-              Nothing found
-            </div>
-          ) : (
-            <>
-              <MultiMessage
-                key={conversationId} // avoid internal state mixture
-                messageId={conversationId}
-                conversation={conversation}
-                messagesTree={_messagesTree}
-                scrollToBottom={scrollToBottom}
-                currentEditId={currentEditId}
-                setCurrentEditId={setCurrentEditId}
-              />
-              <CSSTransition
-                in={showScrollButton}
-                timeout={400}
-                classNames="scroll-down"
-                unmountOnExit={false}
-                // appear
-              >
-                {() =>
-                  showScrollButton && (
-                    <ScrollToBottom scrollHandler={scrollHandler} />
-                  )
-                }
-              </CSSTransition>
-            </>
-          )}
+          
           <div
             className="dark:gpt-dark-gray group h-0 w-full flex-shrink-0 dark:border-gray-900/50"
             ref={messagesEndRef}
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

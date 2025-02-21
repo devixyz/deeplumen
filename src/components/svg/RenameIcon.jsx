@@ -1,4 +1,9 @@
-import React from 'react';
+/*
+ * @Description:
+ * @Author: Devin
+ * @Date: 2025-02-20 15:30:07
+ */
+import React from "react";
 
 export default function RenameIcon() {
   return (

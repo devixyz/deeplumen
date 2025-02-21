@@ -7,8 +7,8 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
-import Landing from "../components/ui/Landing";
-import Messages from "../components/Messages";
+
+import ChatList from "../components/aiTools";
 import TextChat from "../components/Input";
 
 import store from "~/store";
@@ -94,8 +94,11 @@ export default function Chat() {
 
   return (
     <>
-      {conversationId === "new" ? <Landing /> : <Messages />}
-      <TextChat />
+      <ChatList
+        appChatListData={messagesQuery?.data?.data ?? []}
+        currentConversationId={conversationId}
+      />
+      {/* <TextChat /> */}
     </>
   );
 }

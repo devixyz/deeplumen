@@ -3,7 +3,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { useUpdateConversationMutation } from "~/data-provider";
 import RenameButton from "./RenameButton";
 import DeleteButton from "./DeleteButton";
-import ConvoIcon from "../svg/ConvoIcon";
+import ConvoIcon from "../svg/ConvoIcon2";
 
 import store from "~/store";
 
@@ -85,10 +85,10 @@ export default function Conversation({ conversation, retainView }) {
 
   const aProps = {
     className:
-      "bg-gray-50 py-1 dark:bg-white/5 animate-flash group relative flex cursor-pointer items-center gap-3 break-all rounded-md  py-3 px-3 pr-14 text-black dark:text-white bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-800",
+      "py-1 dark:bg-white/5 group relative flex cursor-pointer items-center gap-3 break-all rounded-md  py-3 px-3 pr-14 text-black dark:text-white bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800",
   };
 
-  if (currentConversation?.conversationId !== conversationId) {
+  if (currentConversation?.id !== conversationId) {
     aProps.className =
       "bg-gray-50 py-1 dark:bg-white/5 text-black dark:text-white group relative flex cursor-pointer items-center gap-3 break-all rounded-md py-3 px-3 bg-gray-200 hover:bg-gray-200 dark:hover:bg-[#2A2B32]";
   }
