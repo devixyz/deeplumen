@@ -35,7 +35,9 @@ const DialogTemplate = forwardRef((props, ref) => {
       <DialogFooter>
         <div>{leftButtons ? leftButtons : null}</div>
         <div className="flex gap-2">
-          <DialogClose className="dark:hover:gray-400 border-gray-700">Cancel</DialogClose>
+          <DialogClose onClick={(e) => {
+            e.stopPropagation();
+          }} className="dark:hover:gray-400 border-gray-700">Cancel</DialogClose>
           {buttons ? buttons : null}
           {selection ? (
             <DialogClose

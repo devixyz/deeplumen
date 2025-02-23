@@ -3,11 +3,12 @@
  * @Author: Devin
  * @Date: 2025-02-20 15:30:07
  */
-import { useEffect } from "react";
+import React,{ useEffect,useState } from "react";
 import TrashIcon from "../svg/TrashIcon";
 import CrossIcon from "../svg/CrossIcon";
 import { useRecoilValue } from "recoil";
 import { useDeleteConversationMutation } from "~/data-provider";
+import DeleteConversation from "./DeleteConversation";
 
 import store from "~/store";
 
@@ -33,19 +34,30 @@ export default function DeleteButton({
     }
   }, [deleteConvoMutation.isSuccess]);
 
-const clickHandler = (event) => {
-  event.stopPropagation();
+const clickHandler = () => {
   deleteConvoMutation.mutate({ conversationId, source: "button" });
 };
 
-const handler = renaming ? (event) => { event.stopPropagation(); cancelHandler(); } : clickHandler;
+  const handler = renaming ? cancelHandler: clickHandler;
+
+  const [open, setOpen] = useState(false)
+
+  const onOpenChange = (open) => {
+    setOpen(open);
+  };
 
   return (
-    <button
+    <React.Fragment>
+      <button
       className="p-1 hover:text-gray-700 dark:hover:text-gray-200"
-      onClick={handler}
+      onClick={(event) => {
+        event.stopPropagation()
+        setOpen(true)
+      }}
     >
       {renaming ? <CrossIcon /> : <TrashIcon />}
     </button>
+      {open && <DeleteConversation onSave={handler} open={open} onOpenChange={onOpenChange} />}
+    </React.Fragment>
   );
 }
