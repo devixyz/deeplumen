@@ -7,11 +7,11 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
+import store from "~/store";
 
 import ChatList from "../components/aiTools";
 import TextChat from "../components/Input";
 
-import store from "~/store";
 import {
   useGetMessagesByConvoId,
   useGetConversationByIdMutation,
@@ -31,12 +31,15 @@ export default function Chat() {
   const messagesQuery = useGetMessagesByConvoId(conversationId, {
     enabled: false,
   });
-  const getConversationMutation =
-    useGetConversationByIdMutation(conversationId);
+  const [conversationsList] = useRecoilState(
+    store.conversationsList
+  );
+  const { switchToConversation } = store.useConversation();
 
   // when conversation changed or conversationId (in url) changed
   useEffect(() => {
     console.log(conversation, conversationId, "conversation22");
+
     if (conversation == null) {
       // no current conversation, we need to do something
       if (conversationId === "new") {
@@ -44,18 +47,6 @@ export default function Chat() {
         newConversation();
       } else if (conversationId) {
         // fetch it from server
-        getConversationMutation.mutate(conversationId, {
-          onSuccess: (data) => {
-            setConversation(data);
-          },
-          onError: (error) => {
-            console.error("failed to fetch the conversation");
-            console.error(error);
-            navigate(`/chat/new`);
-            newConversation();
-          },
-        });
-        setMessages(null);
       } else {
         navigate(`/chat/new`);
       }
@@ -69,6 +60,14 @@ export default function Chat() {
       import.meta.env.VITE_APP_TITLE ||
       "Chat";
   }, [conversation, conversationId]);
+  
+  useEffect(() => {
+   if (conversationId!=="new"&&conversationsList) {
+      switchToConversation(
+          conversationsList.find((item) => item.id === conversationId) ?? []
+      );
+    }
+  }, [conversationsList])
 
   useEffect(() => {
     if (conversationId == "new") return;

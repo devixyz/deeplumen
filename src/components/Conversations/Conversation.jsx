@@ -85,12 +85,12 @@ export default function Conversation({ conversation, retainView }) {
 
   const aProps = {
     className:
-      "py-1 dark:bg-white/5 group relative flex cursor-pointer items-center gap-3 break-all rounded-md  py-3 px-3 pr-14 text-black dark:text-white bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800",
+      "hover:group py-1 dark:bg-white/5 group relative flex cursor-pointer items-center gap-3 break-all rounded-md  py-3 px-3 pr-14 text-black dark:text-white bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800",
   };
 
   if (currentConversation?.id !== conversationId) {
     aProps.className =
-      "bg-gray-50 py-1 dark:bg-white/5 text-black dark:text-white group relative flex cursor-pointer items-center gap-3 break-all rounded-md py-3 px-3 bg-gray-200 hover:bg-gray-200 dark:hover:bg-[#2A2B32]";
+      "hover:group bg-gray-50 py-1 dark:bg-white/5 text-black dark:text-white group relative flex cursor-pointer items-center gap-3 break-all rounded-md py-3 px-3 bg-gray-200 hover:bg-gray-200 dark:hover:bg-[#2A2B32]";
   }
 
   return (
@@ -113,8 +113,8 @@ export default function Conversation({ conversation, retainView }) {
           title
         )}
       </div>
-      {currentConversation?.id === conversationId ? (
-        <div className="visible absolute right-1 z-10 flex">
+      {currentConversation?.id !== conversationId ? (
+        <div className="visible absolute right-1 z-10 flex invisible  group-hover:visible">
           {/* <RenameButton
             conversationId={conversationId}
             renaming={renaming}

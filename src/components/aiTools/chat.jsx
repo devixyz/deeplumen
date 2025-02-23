@@ -7,7 +7,10 @@ import Button from "./button";
 import { getChatApiUrl } from "./ssePost";
 import ArIcon from "~/components/arIcon";
 import Landing from "~/components/ui/Landing";
+import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
+import store from "~/store";
 const Chat = ({
   chatList,
   isResponding,
@@ -29,10 +32,22 @@ const Chat = ({
   const chatFooterRef = useRef(null);
   const userScrolledRef = useRef(false);
   const [newConversationId, setNewConversationId] = useState(conversationId);
-
+   const navigate = useNavigate();
+  const [currentConversation, setCurrentConversation] = useRecoilState(
+    store.conversation
+  );
   const handleNewConversationCompleted = useCallback((newConversationId) => {
+    setCurrentConversation({
+      id: newConversationId,
+    });
     setNewConversationId(newConversationId);
+    console.log(newConversationId, "newConversationId");
+    navigate(`/chat/${newConversationId}`);
   }, []);
+
+  useEffect(() => {
+    setNewConversationId(conversationId);
+  },[conversationId])
 
   const handleScrolltoBottom = useCallback(() => {
     if (chatContainerRef.current && !userScrolledRef.current)
@@ -85,6 +100,8 @@ const Chat = ({
   }, []);
 
   const [query, setQuery] = useState("");
+  const { conversationId: paramConversationId } = useParams();
+
 
   const onSend = useCallback(
     (message, files) => {

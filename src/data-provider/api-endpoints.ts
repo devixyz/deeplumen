@@ -19,8 +19,9 @@ export const conversations = (user: string, limit: string = "20") => {
   return `/api/v1/conversations?user=${user}&&last_id=&limit=${limit}`;
 };
 
-export const conversationById = (id: string) => {
-  return `/api/convos/${id}`;
+
+export const conversationById = (id: string, user: string = "abc-123") => {
+  return `/api/v1/conversations?user=${user}&conversation_id=${id}`;
 };
 
 export const updateConversation = () => {
@@ -28,8 +29,13 @@ export const updateConversation = () => {
 };
 
 export const deleteConversation = () => {
-  return `/api/convos/clear`;
+  return `/api/v1/convos/clear`;
 };
+
+export const deleteConversationById = (conversation_id) => {
+  return `/api/v1/conversations/${conversation_id}`;
+};
+
 
 export const search = (q: string, pageNumber: string) => {
   return `/api/search?q=${q}&pageNumber=${pageNumber}`;

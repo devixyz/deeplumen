@@ -33,11 +33,12 @@ export default function DeleteButton({
     }
   }, [deleteConvoMutation.isSuccess]);
 
-  const clickHandler = () => {
-    deleteConvoMutation.mutate({ conversationId, source: "button" });
-  };
+const clickHandler = (event) => {
+  event.stopPropagation();
+  deleteConvoMutation.mutate({ conversationId, source: "button" });
+};
 
-  const handler = renaming ? cancelHandler : clickHandler;
+const handler = renaming ? (event) => { event.stopPropagation(); cancelHandler(); } : clickHandler;
 
   return (
     <button

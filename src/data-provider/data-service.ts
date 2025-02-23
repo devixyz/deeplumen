@@ -19,9 +19,8 @@ export function abortRequestWithMessage(
   });
 }
 
-export function deleteConversation(payload: t.TDeleteConversationRequest) {
-  //todo: this should be a DELETE request
-  return request.post(endpoints.deleteConversation(), { arg: payload });
+export function deleteConversation(id: string, user: string = "abc-123") {
+  return request.delete(endpoints.deleteConversationById(id),{ user: user });
 }
 
 export function clearAllConversations(): Promise<unknown> {
@@ -33,7 +32,9 @@ export function getMessagesByConvoId(id: string): Promise<t.TMessage[]> {
 }
 
 export function getConversationById(id: string): Promise<t.TConversation> {
-  return request.get(endpoints.conversationById(id));
+  const result = request.get(endpoints.conversationById(id)) 
+  console.log(result,'result');
+  return result;
 }
 
 export function updateConversation(

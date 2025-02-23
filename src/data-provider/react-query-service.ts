@@ -113,22 +113,20 @@ export const useUpdateConversationMutation = (
   );
 };
 
+
+
 export const useDeleteConversationMutation = (
-  id?: string
-): UseMutationResult<
-  t.TDeleteConversationResponse,
-  unknown,
-  t.TDeleteConversationRequest,
-  unknown
-> => {
+  id?: string,
+  user: string = "abc-123"
+): UseMutationResult<any> => {
   const queryClient = useQueryClient();
   return useMutation(
-    (payload: t.TDeleteConversationRequest) =>
-      dataService.deleteConversation(payload),
+    () =>
+      dataService.deleteConversation(id,user),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([QueryKeys.conversation, id]);
-        queryClient.invalidateQueries([QueryKeys.allConversations]);
+        // queryClient.invalidateQueries([QueryKeys.conversation, id]);
+        // queryClient.invalidateQueries([QueryKeys.allConversations]);
       },
     }
   );

@@ -42,7 +42,7 @@ export default function Nav({ navVisible, setNavVisible }) {
 
   const [conversations, setConversations] = useState([]);
   // current page
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(100);
 
   // data provider
   const getConversationsQuery = useGetConversationsQuery("abc-123", limit, {
@@ -51,6 +51,8 @@ export default function Nav({ navVisible, setNavVisible }) {
 
   const { newConversation, searchPlaceholderConversation } =
     store.useConversation();
+    const { setConversationsStore  } = store.useConversations();
+
 
   // current conversation
   const conversation = useRecoilValue(store.conversation);
@@ -58,7 +60,8 @@ export default function Nav({ navVisible, setNavVisible }) {
   const refreshConversationsHint = useRecoilValue(
     store.refreshConversationsHint
   );
-  const { refreshConversations } = store.useConversations();
+
+
 
   const [isFetching, setIsFetching] = useState(false);
 
@@ -74,6 +77,7 @@ export default function Nav({ navVisible, setNavVisible }) {
       let { data: conversations } = getConversationsQuery.data;
       console.log(getConversationsQuery, "conversations");
       setConversations(conversations);
+      setConversationsStore(conversations)
     }
   }, [getConversationsQuery.isSuccess, getConversationsQuery.data]);
 

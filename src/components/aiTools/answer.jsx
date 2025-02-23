@@ -10,15 +10,18 @@ import { Markdown } from "./markdown";
 // import CopyBtn from "~/components/copy-btn";
 // import LoadingAnim from "~/components/loading-anim";
 import ArIcon from "~/components/arIcon";
+import Content from "./Content/Content";
+
 
 const BasicContent = ({ item }) => {
   const { content } = item;
 
   return (
-    <Markdown
-      content={content}
-      className={`${item.isError && "!text-[#F04438]"}`}
-    />
+    // <Markdown
+    //   content={content}
+    //   className={`${item.isError && "!text-[#F04438]"}`}
+    // />
+      <Content content={content}></Content>
   );
 };
 
@@ -47,8 +50,11 @@ const Answer = ({ item, answerIcon, responding, chatAnswerContainerInner }) => {
             <div
               ref={contentRef}
               className={`
-              relative inline-block px-4 py-3 max-w-full bg-gray-100  rounded-2xl text-sm text-gray-900
+              relative inline-block px-4 py-0 max-w-full rounded-2xl text-gray-900 dark:text-white leading-[1.75]  text-[1rem]
             `}
+              style={{
+                  fontFamily: "ui-sans-serif, -apple-system, system-ui, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol"
+              }}
             >
               <div
                 className={"absolute flex justify-end gap-1 -top-4 right-6"}

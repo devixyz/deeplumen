@@ -40,9 +40,11 @@ async function _put(url: string, data?: any) {
   return response.data;
 }
 
-async function _delete<T>(url: string): Promise<T> {
+async function _delete<T>(url: string, data?: any): Promise<T> {
+  console.log(data,'dat')
   const response = await axios.delete(url, {
-    headers: AUTH_HEADER,
+    data: data,
+    headers: { "Content-Type": "application/json", ...AUTH_HEADER },
   });
   return response.data;
 }

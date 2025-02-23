@@ -40,7 +40,7 @@ export default function Landing() {
         <h1
           id="landing-title"
           // className="mb-10 ml-auto mr-auto mt-6 flex items-center justify-center gap-2 text-center text-4xl font-semibold sm:mb-16 md:mt-[10vh]"
-          className="flex items-center justify-center w-[24rem] w-[24rem] mb-8 ml-auto mr-auto mt-6 font-semibold  md:mt-[16vh]"
+          className="flex items-center justify-center w-[24rem] w-[24rem] mb-8 ml-auto mr-auto mt-6 font-semibold  md:mt-[6vh]"
         >
           <img src={LandingPng} alt="Landing" />
           {/* {import.meta.env.VITE_APP_TITLE || 'DeepLumen'} */}

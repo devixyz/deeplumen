@@ -6,7 +6,7 @@
 import { memo } from "react";
 import { Markdown } from "./markdown";
 import ImageGallery from "./image-uploader/image-gallery";
-import ArIcon from "~/components/arIcon";
+import Content from "./Content/Content";
 
 const Question = ({ item, questionIcon }) => {
   const { content, message_files } = item;
@@ -17,9 +17,13 @@ const Question = ({ item, questionIcon }) => {
   return (
     <div className="flex justify-end mb-2 last:mb-0 pl-10">
       <div className="group relative mr-4 w-max-[90%]">
-        <div className="px-4 py-3 bg-[#D1E9FF]/50  rounded-2xl text-sm text-gray-900">
+        <div className="px-4 py-1 bg-[#e8e8e880] dark:bg-[#2f2f2f] rounded-2xl text-gray-900 dark:text-white   leading-[1.75] text-[1rem]"
+              style={{
+                  fontFamily: "ui-sans-serif, -apple-system, system-ui, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol"
+              }}>
           {!!imgSrcs.length && <ImageGallery srcs={imgSrcs} />}
-          <Markdown content={content} />
+          {/* <Markdown content={content} /> */}
+          <Content content={content}></Content>
         </div>
         <div className="mt-1 h-[18px]" />
       </div>

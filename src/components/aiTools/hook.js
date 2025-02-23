@@ -49,6 +49,7 @@ export const useChat = (prevChatList, stopChat, currentConversationId) => {
     });
   }, []);
 
+
   const handleGetAccessToken = useCallback(async (token) => {
     let res = await getAccessTokenAndStore(token);
     setCurrentAppToken(res);
@@ -158,6 +159,7 @@ export const useChat = (prevChatList, stopChat, currentConversationId) => {
         isAnswer: true,
       };
 
+
       handleResponding(true);
       hasStopResponded.current = false;
 
@@ -227,7 +229,10 @@ export const useChat = (prevChatList, stopChat, currentConversationId) => {
 
             if (onConversationComplete)
               onConversationComplete(connversationId.current);
-
+            console.log(
+              connversationId.current,
+              "connversationId.current"
+            )
             if (
               connversationId.current &&
               !hasStopResponded.current &&
@@ -242,6 +247,8 @@ export const useChat = (prevChatList, stopChat, currentConversationId) => {
               const newResponseItem = data.find(
                 (item) => item.id === responseItem.id
               );
+            
+              
               if (!newResponseItem) return;
 
               const newChatList = produce(chatListRef.current, (draft) => {
