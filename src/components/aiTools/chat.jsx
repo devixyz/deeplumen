@@ -36,6 +36,9 @@ const Chat = ({
   const [currentConversation, setCurrentConversation] = useRecoilState(
     store.conversation
   );
+
+  const { refreshConversations } = store.useConversations();
+
   const handleNewConversationCompleted = useCallback((newConversationId) => {
     setCurrentConversation({
       id: newConversationId,
@@ -43,6 +46,7 @@ const Chat = ({
     setNewConversationId(newConversationId);
     console.log(newConversationId, "newConversationId");
     navigate(`/chat/${newConversationId}`);
+    refreshConversations();
   }, []);
 
   useEffect(() => {
@@ -133,12 +137,12 @@ const Chat = ({
     return (
       isResponding && (
         <div
-          className="group flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-200  dark:hover:bg-gray-800 cursor-pointer"
+          className="group flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-200  dark:hover:bg-gray-800 cursor-pointer "
           onClick={handleStop}
         >
           <ArIcon
             name="Stop"
-            className={`w-5 h-5 text-black group-hover:text-primary-600`}
+            className={`w-5 h-5 text-black dark:text-white group-hover:text-primary-600`}
           />
         </div>
       )
@@ -155,12 +159,20 @@ const Chat = ({
     handleRestart();
   };
 
+  console.log(conversationId, "newConversationId2");
+
+  // useEffect(() => {
+  //   if (conversationId !== "new" && conversationId !== "") {
+  //     navigate(`/chat/${conversationId}`);
+  //   }
+  // }, [conversationId]);
+
   return (
     <div className="relative h-full w-full m-auto overflow-hidden mb-2">
       <div className="h-10 sm:block hidden"></div>
       <div
         ref={chatContainerRef}
-        className={"relative overflow-y-auto sm:p-8"}
+        className={`relative overflow-y-auto sm:p-8 ${conversationId === "new" || (conversationId === "" && "sm:pt-0")}`}
         style={{
           height: "calc(100% - 10.5rem)",
         }}

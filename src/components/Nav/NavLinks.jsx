@@ -3,25 +3,25 @@
  * @Author: Devin
  * @Date: 2025-02-20 09:57:11
  */
-import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import TrashIcon from '../svg/TrashIcon';
-import { Download } from 'lucide-react';
-import NavLink from './NavLink';
-import ExportModel from './ExportConversation/ExportModel';
-import ClearConvos from './ClearConvos';
-import DarkMode from './DarkMode';
-import Logout from './Logout';
-import { useAuthContext } from '~/hooks/AuthContext';
-import { cn } from '~/utils/';
-import DotsIcon from '../svg/DotsIcon';
+import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import TrashIcon from "../svg/TrashIcon";
+import { Download } from "lucide-react";
+import NavLink from "./NavLink";
+import ExportModel from "./ExportConversation/ExportModel";
+import ClearConvos from "./ClearConvos";
+import DarkMode from "./DarkMode";
+import Logout from "./Logout";
+import { useAuthContext } from "~/hooks/AuthContext";
+import { cn } from "~/utils/";
+import DotsIcon from "../svg/DotsIcon";
 
-import ClearHistoryIcon from '../svg/ClearHistoryIcon';
-import UserIcon from '../svg/UserIcon';
+import ClearHistoryIcon from "../svg/ClearHistoryIcon";
+import UserIcon from "../svg/UserIcon";
 
-import UpdatesIcon from '../svg/UpdatesIcon';
+import UpdatesIcon from "../svg/UpdatesIcon";
 
-import store from '~/store';
+import store from "~/store";
 
 export default function NavLinks() {
   const [showExports, setShowExports] = useState(false);
@@ -32,8 +32,8 @@ export default function NavLinks() {
 
   const exportable =
     conversation?.conversationId &&
-    conversation?.conversationId !== 'new' &&
-    conversation?.conversationId !== 'search';
+    conversation?.conversationId !== "new" &&
+    conversation?.conversationId !== "search";
 
   const clickHandler = () => {
     if (exportable) setShowExports(true);
@@ -41,7 +41,7 @@ export default function NavLinks() {
 
   return (
     <>
-      <ul className="w-full bg-white dark:bg-gray-900 p-2">
+      <ul className="w-full bg-white dark:bg-gray-900 py-1 px-2">
         {/* <li>
           <NavLink
             className={cn(
@@ -88,8 +88,12 @@ export default function NavLinks() {
         </li>
       </ul>
 
-      {showExports && <ExportModel open={showExports} onOpenChange={setShowExports} />}
-      {showClearConvos && <ClearConvos open={showClearConvos} onOpenChange={setShowClearConvos} />}
+      {showExports && (
+        <ExportModel open={showExports} onOpenChange={setShowExports} />
+      )}
+      {showClearConvos && (
+        <ClearConvos open={showClearConvos} onOpenChange={setShowClearConvos} />
+      )}
     </>
   );
 }

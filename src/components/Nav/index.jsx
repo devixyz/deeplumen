@@ -163,7 +163,7 @@ export default function Nav({ navVisible, setNavVisible }) {
                   />
                 </div>
               </div>
-              <div className="p-1">
+              <div>
                 <NavLinks />
               </div>
             </nav>

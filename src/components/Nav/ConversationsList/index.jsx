@@ -53,7 +53,9 @@ const Section = ({
   isFetching,
   isNotClick,
 }) => (
-  <div className="flex-1 flex flex-col justify-start mb-4 h-[30%]">
+  <div
+    className={`flex-1 flex flex-col justify-start mb-2 h-[25%] ${title == "My Chats" && "h-[45%]"}`}
+  >
     <h2 className="relative font-bold text-[1.2rem] p-2 pb-4 text-black dark:text-white text-center">
       {title}
       {title == "My Chats" && (
@@ -62,16 +64,18 @@ const Section = ({
         </div>
       )}
     </h2>
-    {isLoading || isFetching ? (
-      <Spinner />
-    ) : (
-      <Conversations
-        conversations={chats}
-        conversationId={conversationId}
-        moveToTop={moveToTop}
-        isNotClick={isNotClick}
-      />
-    )}
+    <div className="flex-1 overflow-y-auto">
+      {isLoading || isFetching ? (
+        <Spinner />
+      ) : (
+        <Conversations
+          conversations={chats}
+          conversationId={conversationId}
+          moveToTop={moveToTop}
+          isNotClick={isNotClick}
+        />
+      )}
+    </div>
   </div>
 );
 

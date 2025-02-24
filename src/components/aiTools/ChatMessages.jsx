@@ -8,17 +8,20 @@ import Chat from "./chat";
 import { useChat } from "./hook";
 import { apiFetch } from "./apiFetch.js";
 
-export async function stopChatApi(task_id, token) {
+export async function stopChatApi(task_id, token, user = "abc-123") {
   const response = await apiFetch(
-    getApiUrl(`/chat-messages/${task_id}/stop`),
+    `/api/v1/chat-messages/${task_id}/stop`,
     "POST",
-    null,
+    {
+      user: user,
+    },
     {
       headers: {
         Authorization: "Bearer " + token,
       },
     }
   );
+  console.log(response, "response");
   return response;
 }
 
@@ -73,6 +76,10 @@ const ChatList = ({ appChatListData, currentConversationId }) => {
     currentAppToken,
     currentApp,
   } = useChat(appPrevChatList, stopChat, currentConversationId);
+
+  useEffect(() => {
+    console.log(conversationId, chatList, "conversationId");
+  }, [conversationId]);
 
   return (
     <div className="flex flex-col h-full">

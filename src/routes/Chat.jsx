@@ -31,9 +31,7 @@ export default function Chat() {
   const messagesQuery = useGetMessagesByConvoId(conversationId, {
     enabled: false,
   });
-  const [conversationsList] = useRecoilState(
-    store.conversationsList
-  );
+  const [conversationsList] = useRecoilState(store.conversationsList);
   const { switchToConversation } = store.useConversation();
 
   // when conversation changed or conversationId (in url) changed
@@ -48,11 +46,11 @@ export default function Chat() {
       } else if (conversationId) {
         // fetch it from server
       } else {
-        navigate(`/chat/new`);
+        // navigate(`/chat/new`);
       }
     } else if (conversation?.id !== conversationId && !!conversation?.id) {
       // conversationId (in url) should always follow conversation?.conversationId, unless conversation is null
-      navigate(`/chat/${conversation?.id}`);
+      // navigate(`/chat/${conversation?.id}`);
     }
     document.title =
       conversation?.name ||
@@ -60,14 +58,14 @@ export default function Chat() {
       import.meta.env.VITE_APP_TITLE ||
       "Chat";
   }, [conversation, conversationId]);
-  
+
   useEffect(() => {
-   if (conversationId!=="new"&&conversationsList) {
+    if (conversationId !== "new" && conversationsList) {
       switchToConversation(
-          conversationsList.find((item) => item.id === conversationId) ?? []
+        conversationsList.find((item) => item.id === conversationId) ?? []
       );
     }
-  }, [conversationsList])
+  }, [conversationsList]);
 
   useEffect(() => {
     if (conversationId == "new") return;
