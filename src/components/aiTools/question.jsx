@@ -4,7 +4,7 @@
  * @Date: 2024-08-26 09:42:55
  */
 import { memo } from "react";
-import { Markdown } from "./markdown";
+import CopyBtn from "~/components/copy-btn";
 import ImageGallery from "./image-uploader/image-gallery";
 import Content from "./Content/Content";
 
@@ -17,10 +17,19 @@ const Question = ({ item, questionIcon }) => {
   return (
     <div className="flex justify-end mb-2 last:mb-0 pl-10">
       <div className="group relative mr-4 w-max-[90%]">
-        <div className="px-4 py-1 bg-[#e8e8e880] dark:bg-[#2f2f2f] rounded-2xl text-gray-900 dark:text-white   leading-[1.75] text-[1rem]"
-              style={{
-                  fontFamily: "ui-sans-serif, -apple-system, system-ui, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol"
-              }}>
+        <div
+          className={"absolute flex justify-end gap-1 -top-4 right-6"}
+          // style={(!hasWorkflowProcess && positionRight) ? { left: contentWidth + 8 } : {}}
+        >
+          <CopyBtn value={content} className="hidden group-hover:block" />
+        </div>
+        <div
+          className="px-4 py-1 bg-[#e8e8e880] dark:bg-[#2f2f2f] rounded-2xl text-gray-900 dark:text-white   leading-[1.75] text-[1rem]"
+          style={{
+            fontFamily:
+              "ui-sans-serif, -apple-system, system-ui, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol",
+          }}
+        >
           {!!imgSrcs.length && <ImageGallery srcs={imgSrcs} />}
           {/* <Markdown content={content} /> */}
           <Content content={content}></Content>

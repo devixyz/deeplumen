@@ -3,7 +3,7 @@
  * @Author: Devin
  * @Date: 2025-02-20 15:30:07
  */
-import React,{ useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import TrashIcon from "../svg/TrashIcon";
 import CrossIcon from "../svg/CrossIcon";
 import { useRecoilValue } from "recoil";
@@ -17,6 +17,7 @@ export default function DeleteButton({
   renaming,
   cancelHandler,
   retainView,
+  isNotClick,
 }) {
   const currentConversation = useRecoilValue(store.conversation) || {};
   const { newConversation } = store.useConversation();
@@ -34,13 +35,13 @@ export default function DeleteButton({
     }
   }, [deleteConvoMutation.isSuccess]);
 
-const clickHandler = () => {
-  deleteConvoMutation.mutate({ conversationId, source: "button" });
-};
+  const clickHandler = () => {
+    deleteConvoMutation.mutate({ conversationId, source: "button" });
+  };
 
-  const handler = renaming ? cancelHandler: clickHandler;
+  const handler = renaming ? cancelHandler : clickHandler;
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   const onOpenChange = (open) => {
     setOpen(open);
@@ -49,15 +50,22 @@ const clickHandler = () => {
   return (
     <React.Fragment>
       <button
-      className="p-1 hover:text-gray-700 dark:hover:text-gray-200"
-      onClick={(event) => {
-        event.stopPropagation()
-        setOpen(true)
-      }}
-    >
-      {renaming ? <CrossIcon /> : <TrashIcon />}
-    </button>
-      {open && <DeleteConversation onSave={handler} open={open} onOpenChange={onOpenChange} />}
+        className="p-1 hover:text-gray-700 dark:hover:text-gray-200"
+        onClick={(event) => {
+          event.stopPropagation();
+          if (isNotClick) return;
+          setOpen(true);
+        }}
+      >
+        {renaming ? <CrossIcon /> : <TrashIcon />}
+      </button>
+      {open && (
+        <DeleteConversation
+          onSave={handler}
+          open={open}
+          onOpenChange={onOpenChange}
+        />
+      )}
     </React.Fragment>
   );
 }

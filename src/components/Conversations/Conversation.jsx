@@ -7,7 +7,7 @@ import ConvoIcon from "../svg/ConvoIcon2";
 
 import store from "~/store";
 
-export default function Conversation({ conversation, retainView }) {
+export default function Conversation({ conversation, retainView, isNotClick }) {
   const [currentConversation, setCurrentConversation] = useRecoilState(
     store.conversation
   );
@@ -28,6 +28,7 @@ export default function Conversation({ conversation, retainView }) {
   const [titleInput, setTitleInput] = useState(title);
 
   const clickHandler = async () => {
+    if (isNotClick) return;
     if (currentConversation?.id === conversationId) {
       return;
     }
@@ -85,12 +86,12 @@ export default function Conversation({ conversation, retainView }) {
 
   const aProps = {
     className:
-      "hover:group py-1 dark:bg-white/5 group relative flex cursor-pointer items-center gap-3 break-all rounded-md  py-3 px-3 pr-14 text-black dark:text-white bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800",
+      "hover:group py-1 dark:bg-white/5 group relative flex cursor-pointer items-center gap-3 break-all rounded-md  py-3 px-3 pr-14 text-black dark:text-white bg-gray-200 dark:bg-[#2A2B32]  hover:bg-gray-200 dark:hover:bg-gray-800 my-[2px]",
   };
 
   if (currentConversation?.id !== conversationId) {
     aProps.className =
-      "hover:group bg-gray-50 py-1 dark:bg-white/5 text-black dark:text-white group relative flex cursor-pointer items-center gap-3 break-all rounded-md py-3 px-3 bg-gray-200 hover:bg-gray-200 dark:hover:bg-[#2A2B32]";
+      "hover:group bg-gray-50 py-1 dark:bg-white/5 text-black dark:text-white group relative flex cursor-pointer items-center gap-3 break-all rounded-md py-3 px-3 bg-gray-200 hover:bg-gray-200 dark:hover:bg-[#2A2B32] my-[2px]";
   }
 
   return (
@@ -126,6 +127,7 @@ export default function Conversation({ conversation, retainView }) {
             renaming={renaming}
             cancelHandler={cancelHandler}
             retainView={retainView}
+            isNotClick={isNotClick}
           />
         </div>
       ) : (

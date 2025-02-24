@@ -1,0 +1,17 @@
+.copyIcon {
+  background-image: url(./images/copy.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.copyIcon:hover {
+  background-image: url(./images/copy-hover.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.copyIcon-copied {
+  background-image: url(./images/copied.svg);
+    background-position: center;
+  background-repeat: no-repeat;
+}

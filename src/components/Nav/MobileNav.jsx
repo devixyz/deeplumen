@@ -1,12 +1,17 @@
-import React from 'react';
-import { useRecoilValue } from 'recoil';
+/*
+ * @Description:
+ * @Author: Devin
+ * @Date: 2025-02-20 15:30:07
+ */
+import React from "react";
+import { useRecoilValue } from "recoil";
 
-import store from '~/store';
+import store from "~/store";
 
 export default function MobileNav({ setNavVisible }) {
   const conversation = useRecoilValue(store.conversation);
   const { newConversation } = store.useConversation();
-  const { title = 'New Chat' } = conversation || {};
+  const { name: title = "New Chat" } = conversation || {};
 
   return (
     <div className="fixed left-0 right-0 top-0 z-10 flex items-center border-b border-white/20 bg-gray-800 pl-1 pt-1 text-gray-200 sm:pl-3 md:hidden">
@@ -33,7 +38,9 @@ export default function MobileNav({ setNavVisible }) {
           <line x1="3" y1="18" x2="21" y2="18" />
         </svg>
       </button>
-      <h1 className="flex-1 text-center text-base font-normal">{title || 'New Chat'}</h1>
+      <h1 className="flex-1 text-center text-base font-normal">
+        {title || "New Chat"}
+      </h1>
       <button type="button" className="px-3" onClick={() => newConversation()}>
         <svg
           stroke="currentColor"

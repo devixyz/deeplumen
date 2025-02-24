@@ -155,9 +155,8 @@ const ChatInput = forwardRef(
       <>
         <div className="relative w-full">
           <div
-            className={`
-            p-[5.5px]  bg-[#f7f9fb] dark:bg-[#484954]  rounded-xl overflow-y-auto
-            ${"isDragActive" && "border-primary-600"}
+            className={`relative p-[5.5px]  bg-[#f7f9fb] dark:bg-[#2f2f2f]  rounded-xl overflow-y-auto 
+            ${"isDragActive" && "border-primary-600  mb-4"}
           `}
           >
             {/* {needNewChat && (
@@ -222,8 +221,8 @@ const ChatInput = forwardRef(
             </>
             <Textarea
               className={`
-              flex-1 block w-full px-2 pr-[118px] py-[7px] leading-5 text-sm text-gray-700 font-[auto] dark:text-white bg-[#F7F9FB] dark:bg-[#484954]
-              pl-36
+              flex-1 block w-full px-2 pr-[118px] py-[7px] leading-5 text-sm text-gray-700 font-[auto] dark:text-white bg-[#F7F9FB] dark:bg-[#2f2f2f]
+              pl-36 max-h-[120px]  overflow-y-auto
             `}
               // ${visionConfig?.enabled ? "pl-20" : "pl-12"}
               value={query}
@@ -256,7 +255,7 @@ const ChatInput = forwardRef(
               </div>
               {query ? (
                 <div
-                  className="flex justify-center items-center ml-2 w-8 h-8 cursor-pointer  hover:bg-gray-200 dark:hover:bg-gray-800  rounded-lg"
+                  className="flex justify-center items-center ml-2 w-8 h-8 cursor-pointer  hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-white  rounded-lg"
                   onClick={() => {
                     onChangeQuery && onChangeQuery("");
                     setQuery("");

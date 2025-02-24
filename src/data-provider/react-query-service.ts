@@ -113,32 +113,58 @@ export const useUpdateConversationMutation = (
   );
 };
 
-
-
 export const useDeleteConversationMutation = (
   id?: string,
   user: string = "abc-123"
 ): UseMutationResult<any> => {
   const queryClient = useQueryClient();
+  return useMutation(() => dataService.deleteConversation(id, user), {
+    onSuccess: () => {
+      // queryClient.invalidateQueries([QueryKeys.conversation, id]);
+      // queryClient.invalidateQueries([QueryKeys.allConversations]);
+    },
+  });
+};
+
+export const useClearConversationsMutation = (
+  user: string = "abc-123"
+): UseMutationResult<unknown> => {
+  const queryClient = useQueryClient();
+
+  const fetchAllConversations = async () => {
+    try {
+      const data = await dataService.getConversations(user, "100");
+      console.log(data, "fetched conversations");
+      return data;
+    } catch (error) {
+      console.error("Error fetching conversations:", error);
+      throw error;
+    }
+  };
+
+  const deleteConversation = async (conversationId: string) => {
+    // 假设这是删除单个聊天信息的 API 调用
+    return await dataService.deleteConversation(conversationId, user);
+  };
+
   return useMutation(
-    () =>
-      dataService.deleteConversation(id,user),
+    async () => {
+      const { data: conversations } = await fetchAllConversations();
+
+      for (const conversation of conversations) {
+        await deleteConversation(conversation.id);
+      }
+    },
     {
       onSuccess: () => {
-        // queryClient.invalidateQueries([QueryKeys.conversation, id]);
-        // queryClient.invalidateQueries([QueryKeys.allConversations]);
+        console.log("Conversations cleared successfully");
+        queryClient.invalidateQueries([QueryKeys.allConversations]);
+      },
+      onError: (error: any) => {
+        console.error("Error clearing conversations:", error);
       },
     }
   );
-};
-
-export const useClearConversationsMutation = (): UseMutationResult<unknown> => {
-  const queryClient = useQueryClient();
-  return useMutation(() => dataService.clearAllConversations(), {
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.allConversations]);
-    },
-  });
 };
 
 export const useGetConversationsQuery = (

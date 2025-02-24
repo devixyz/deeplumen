@@ -12,6 +12,7 @@ import store from "~/store";
 import { useAuthContext } from "~/hooks/AuthContext";
 import { ThemeContext } from "~/hooks/ThemeContext";
 import { cn } from "~/utils/";
+import ConversationsList from "./ConversationsList";
 
 // import resolveConfig from 'tailwindcss/resolveConfig';
 // const tailwindConfig = import('../../../tailwind.config.cjs');
@@ -51,8 +52,7 @@ export default function Nav({ navVisible, setNavVisible }) {
 
   const { newConversation, searchPlaceholderConversation } =
     store.useConversation();
-    const { setConversationsStore  } = store.useConversations();
-
+  const { setConversationsStore } = store.useConversations();
 
   // current conversation
   const conversation = useRecoilValue(store.conversation);
@@ -60,8 +60,6 @@ export default function Nav({ navVisible, setNavVisible }) {
   const refreshConversationsHint = useRecoilValue(
     store.refreshConversationsHint
   );
-
-
 
   const [isFetching, setIsFetching] = useState(false);
 
@@ -77,7 +75,7 @@ export default function Nav({ navVisible, setNavVisible }) {
       let { data: conversations } = getConversationsQuery.data;
       console.log(getConversationsQuery, "conversations");
       setConversations(conversations);
-      setConversationsStore(conversations)
+      setConversationsStore(conversations);
     }
   }, [getConversationsQuery.isSuccess, getConversationsQuery.data]);
 
@@ -88,15 +86,6 @@ export default function Nav({ navVisible, setNavVisible }) {
   const toggleNavVisible = () => {
     setNavVisible((prev) => !prev);
   };
-
-  // useEffect(() => {
-  //   let currentBreakpoint = getCurrentBreakpoint();
-  //   if (currentBreakpoint === 'sm') {
-  //     setNavVisible(false);
-  //   } else {
-  //     setNavVisible(true);
-  //   }
-  // }, [conversationId, setNavVisible]);
 
   const isMobile = () => {
     const userAgent =
@@ -114,9 +103,23 @@ export default function Nav({ navVisible, setNavVisible }) {
     }
   }, [conversationId, setNavVisible]);
 
+  const sharedChats = [
+    {
+      id: "abc-Shared",
+      name: "Placeholder: Shared with me",
+    },
+  ];
+
+  const publishedChats = [
+    {
+      id: "abc-publishedChats",
+      name: "Placeholder: Published with me",
+    },
+  ];
+
   const containerClasses = getConversationsQuery.isLoading
     ? "flex flex-col gap-2 text-gray-100 text-sm h-full justify-center items-center"
-    : "flex flex-col gap-2 text-gray-100 text-sm";
+    : "flex flex-col gap-2 text-gray-100 text-sm h-full";
 
   return (
     <>
@@ -128,11 +131,11 @@ export default function Nav({ navVisible, setNavVisible }) {
         <div className="flex h-full min-h-0 flex-col ">
           <div className="scrollbar-trigger relative flex h-full w-full flex-1 items-start dark:border-white/20 border-r border-gray-200 dark:border-gray-700">
             <nav className="relative flex h-full flex-1 flex-col space-y-1">
-              <div className="p-2">
+              {/* <div className="p-2">
                 <NewChat />
-              </div>
+              </div> */}
               <div
-                className={`flex-1 p-2 flex-col overflow-y-auto ${
+                className={`flex-1 p-2 flex-col overflow-y-auto h-full ${
                   isHovering ? "" : "scrollbar-transparent"
                 } border-b dark:border-white/20`}
                 onMouseEnter={() => setIsHovering(true)}
@@ -140,7 +143,7 @@ export default function Nav({ navVisible, setNavVisible }) {
                 ref={containerRef}
               >
                 <div className={containerClasses}>
-                  {getConversationsQuery.isLoading || isFetching ? (
+                  {/* {getConversationsQuery.isLoading || isFetching ? (
                     <Spinner />
                   ) : (
                     <Conversations
@@ -148,13 +151,16 @@ export default function Nav({ navVisible, setNavVisible }) {
                       conversationId={conversationId}
                       moveToTop={moveToTop}
                     />
-                  )}
-                  {/* <Pages
-                    pageNumber={pageNumber}
-                    pages={pages}
-                    nextPage={nextPage}
-                    previousPage={previousPage}
-                  /> */}
+                  )} */}
+                  <ConversationsList
+                    myChats={conversations}
+                    sharedChats={sharedChats}
+                    publishedChats={publishedChats}
+                    isLoading={getConversationsQuery.isLoading}
+                    isFetching={isFetching}
+                    conversationId={conversationId}
+                    moveToTop={moveToTop}
+                  />
                 </div>
               </div>
               <div className="p-1">
@@ -189,7 +195,10 @@ export default function Nav({ navVisible, setNavVisible }) {
       )}
 
       <div
-        className={"nav-mask" + (navVisible ? " active" : "")}
+        className={
+          "nav-mask bg-white dark:bg-[#565869bf]" +
+          (navVisible ? " active" : "")
+        }
         onClick={toggleNavVisible}
       ></div>
     </>

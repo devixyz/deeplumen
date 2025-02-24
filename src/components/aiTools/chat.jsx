@@ -32,7 +32,7 @@ const Chat = ({
   const chatFooterRef = useRef(null);
   const userScrolledRef = useRef(false);
   const [newConversationId, setNewConversationId] = useState(conversationId);
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   const [currentConversation, setCurrentConversation] = useRecoilState(
     store.conversation
   );
@@ -47,7 +47,7 @@ const Chat = ({
 
   useEffect(() => {
     setNewConversationId(conversationId);
-  },[conversationId])
+  }, [conversationId]);
 
   const handleScrolltoBottom = useCallback(() => {
     if (chatContainerRef.current && !userScrolledRef.current)
@@ -101,7 +101,6 @@ const Chat = ({
 
   const [query, setQuery] = useState("");
   const { conversationId: paramConversationId } = useParams();
-
 
   const onSend = useCallback(
     (message, files) => {
@@ -157,11 +156,11 @@ const Chat = ({
   };
 
   return (
-    <div className="relative h-full w-full m-auto overflow-hidden">
-      <div className="h-10">{}</div>
+    <div className="relative h-full w-full m-auto overflow-hidden mb-2">
+      <div className="h-10 sm:block hidden"></div>
       <div
         ref={chatContainerRef}
-        className={"relative overflow-y-auto p-8"}
+        className={"relative overflow-y-auto sm:p-8"}
         style={{
           height: "calc(100% - 10.5rem)",
         }}
@@ -173,7 +172,7 @@ const Chat = ({
             {chatNode}
             <div
               ref={chatContainerInnerRef}
-              className={`${chatContainerInnerClassName}`}
+              className={`${chatContainerInnerClassName} p-4`}
             >
               {chatList.map((item, index) => {
                 if (item.isAnswer) {
@@ -201,12 +200,14 @@ const Chat = ({
       </div>
       {/* <div className="group h-24 w-full flex-shrink-0 dark:border-gray-900/50 dark:bg-gray-900 md:h-32" /> */}
       <div
-        className={`flex justify-center h-[8rem] md:h-48  ${
+        className={`flex justify-center h-[8rem] md:h-40 ${
           !noStopResponding && chatFooterClassName
         }`}
         ref={chatFooterRef}
       >
-        <div className={`${chatFooterInnerClassName} mt-8 w-2/3`}>
+        <div
+          className={`${chatFooterInnerClassName} mt-16 sm:mt-6  w-3/4 sm:w-2/3`}
+        >
           {/* {!noStopResponding && isResponding && (
             <div className="flex justify-center mb-2">
               <Button onClick={handleStop}>
