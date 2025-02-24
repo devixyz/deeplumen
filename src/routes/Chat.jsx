@@ -21,54 +21,31 @@ export default function Chat() {
   const [conversation, setConversation] = useRecoilState(store.conversation);
   const setMessages = useSetRecoilState(store.messages);
 
-  const { newConversation } = store.useConversation();
-  const { conversationId } = useParams();
-  const navigate = useNavigate();
-
-  console.log(conversationId, "conversationId");
-
   //disabled by default, we only enable it when messagesTree is null
-  const messagesQuery = useGetMessagesByConvoId(conversationId, {
+  const messagesQuery = useGetMessagesByConvoId(conversation?.id, {
     enabled: false,
   });
+
   const [conversationsList] = useRecoilState(store.conversationsList);
   const { switchToConversation } = store.useConversation();
 
-  // when conversation changed or conversationId (in url) changed
   useEffect(() => {
-    console.log(conversation, conversationId, "conversation22");
-
-    if (conversation == null) {
-      // no current conversation, we need to do something
-      if (conversationId === "new") {
-        // create new
-        newConversation();
-      } else if (conversationId) {
-        // fetch it from server
-      } else {
-        // navigate(`/chat/new`);
-      }
-    } else if (conversation?.id !== conversationId && !!conversation?.id) {
-      // conversationId (in url) should always follow conversation?.conversationId, unless conversation is null
-      // navigate(`/chat/${conversation?.id}`);
-    }
     document.title =
       conversation?.name ||
       conversation?.title ||
       import.meta.env.VITE_APP_TITLE ||
       "Chat";
-  }, [conversation, conversationId]);
+  }, [conversation?.id]);
 
   useEffect(() => {
-    if (conversationId !== "new" && conversationsList) {
-      switchToConversation(
-        conversationsList.find((item) => item.id === conversationId) ?? []
-      );
+    if (conversationsList) {
+      // switchToConversation(
+      //   conversationsList.find((item) => item.id === conversation?.id) ?? {}
+      // );
     }
   }, [conversationsList]);
 
   useEffect(() => {
-    if (conversationId == "new") return;
     if (conversation?.id) {
       messagesQuery.refetch(conversation?.id);
     }
@@ -84,16 +61,11 @@ export default function Chat() {
     }
   }, [messagesQuery.data, messagesQuery.isError, setMessages]);
 
-  // if conversationId not match
-  if (conversation?.id !== conversationId) return null;
-  // if conversationId is null
-  if (!conversationId) return null;
-
   return (
     <>
       <ChatList
         appChatListData={messagesQuery?.data?.data ?? []}
-        currentConversationId={conversationId}
+        currentConversationId={conversation?.id}
       />
       {/* <TextChat /> */}
     </>

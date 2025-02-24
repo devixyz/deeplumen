@@ -32,7 +32,7 @@ const Chat = ({
   const chatFooterRef = useRef(null);
   const userScrolledRef = useRef(false);
   const [newConversationId, setNewConversationId] = useState(conversationId);
-  const navigate = useNavigate();
+
   const [currentConversation, setCurrentConversation] = useRecoilState(
     store.conversation
   );
@@ -44,8 +44,7 @@ const Chat = ({
       id: newConversationId,
     });
     setNewConversationId(newConversationId);
-    console.log(newConversationId, "newConversationId");
-    navigate(`/chat/${newConversationId}`);
+
     refreshConversations();
   }, []);
 
@@ -104,7 +103,6 @@ const Chat = ({
   }, []);
 
   const [query, setQuery] = useState("");
-  const { conversationId: paramConversationId } = useParams();
 
   const onSend = useCallback(
     (message, files) => {
@@ -159,25 +157,17 @@ const Chat = ({
     handleRestart();
   };
 
-  console.log(conversationId, "newConversationId2");
-
-  // useEffect(() => {
-  //   if (conversationId !== "new" && conversationId !== "") {
-  //     navigate(`/chat/${conversationId}`);
-  //   }
-  // }, [conversationId]);
-
   return (
     <div className="relative h-full w-full m-auto overflow-hidden mb-2">
       <div className="h-10 sm:block hidden"></div>
       <div
         ref={chatContainerRef}
-        className={`relative overflow-y-auto sm:p-8 ${conversationId === "new" || (conversationId === "" && "sm:pt-0")}`}
+        className={`relative overflow-y-auto sm:p-8 ${conversationId === "" && "sm:pt-0"}`}
         style={{
           height: "calc(100% - 10.5rem)",
         }}
       >
-        {conversationId === "new" || conversationId === "" ? (
+        {!conversationId || conversationId === "" ? (
           <Landing />
         ) : (
           <React.Fragment>

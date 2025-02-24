@@ -5,8 +5,8 @@ import {
   useMemo,
   ReactNode,
   createContext,
-  useContext
-} from 'react';
+  useContext,
+} from "react";
 import {
   TUser,
   TLoginResponse,
@@ -15,9 +15,9 @@ import {
   useLogoutUserMutation,
   useGetUserQuery,
   useRefreshTokenMutation,
-  TLoginUser
-} from '~/data-provider';
-import { useNavigate, useLocation } from 'react-router-dom';
+  TLoginUser,
+} from "~/data-provider";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export type TAuthContext = {
   user: TUser | undefined;
@@ -68,7 +68,7 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getCookieValue = (key) => {
-    let keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+    let keyValue = document.cookie.match("(^|;) ?" + key + "=([^;]*)(;|$)");
     return keyValue ? keyValue[2] : null;
   };
 
@@ -76,19 +76,24 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     loginUser.mutate(data, {
       onSuccess: (data: TLoginResponse) => {
         const { user, token } = data;
-        setUserContext({ token, isAuthenticated: true, user, redirect: '/chat/new' });
+        setUserContext({
+          token,
+          isAuthenticated: true,
+          user,
+          redirect: "/chat",
+        });
       },
       onError: (error) => {
         setError(error.message);
-      }
+      },
     });
   };
 
   const logout = () => {
-    document.cookie.split(';').forEach((c) => {
+    document.cookie.split(";").forEach((c) => {
       document.cookie = c
-        .replace(/^ +/, '')
-        .replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+        .replace(/^ +/, "")
+        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
     logoutUser.mutate(undefined, {
       onSuccess: () => {
@@ -96,12 +101,12 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           token: undefined,
           isAuthenticated: false,
           user: undefined,
-          redirect: '/login'
+          redirect: "/login",
         });
       },
       onError: (error) => {
         setError(error.message);
-      }
+      },
     });
   };
 
@@ -161,20 +166,22 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
       isLoading,
       error,
       login,
-      logout
+      logout,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [user, isLoading, error, isAuthenticated, token]
   );
 
-  return <AuthContext.Provider value={memoedValue}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={memoedValue}>{children}</AuthContext.Provider>
+  );
 };
 
 const useAuthContext = () => {
   const context = useContext(AuthContext);
 
   if (context === undefined) {
-    throw new Error('useAuthContext should be used inside AuthProvider');
+    throw new Error("useAuthContext should be used inside AuthProvider");
   }
 
   return context;

@@ -60,10 +60,6 @@ const ChatList = ({ appChatListData, currentConversationId }) => {
     return chatList;
   }, [appChatListData, currentConversationId]);
 
-  useEffect(() => {
-    console.log(appPrevChatList, "appPrevChatList");
-  }, [appPrevChatList]);
-
   const {
     chatList,
     setChatList,
@@ -76,10 +72,6 @@ const ChatList = ({ appChatListData, currentConversationId }) => {
     currentAppToken,
     currentApp,
   } = useChat(appPrevChatList, stopChat, currentConversationId);
-
-  useEffect(() => {
-    console.log(conversationId, chatList, "conversationId");
-  }, [conversationId]);
 
   return (
     <div className="flex flex-col h-full">

@@ -1,54 +1,58 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { useRegisterUserMutation, TRegisterUser } from '~/data-provider';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook } from '@fortawesome/free-brands-svg-icons';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useRegisterUserMutation, TRegisterUser } from "~/data-provider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebook } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 function Registration() {
   const SERVER_URL = import.meta.env.DEV
     ? import.meta.env.VITE_SERVER_URL_DEV
     : import.meta.env.VITE_SERVER_URL_PROD;
-  const showGoogleLogin = import.meta.env.VITE_SHOW_GOOGLE_LOGIN_OPTION === 'true';
+  const showGoogleLogin =
+    import.meta.env.VITE_SHOW_GOOGLE_LOGIN_OPTION === "true";
 
   const navigate = useNavigate();
   const {
     register,
     watch,
     handleSubmit,
-    formState: { errors }
-  } = useForm<TRegisterUser>({ mode: 'onChange' });
+    formState: { errors },
+  } = useForm<TRegisterUser>({ mode: "onChange" });
   const [error, setError] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const registerUser = useRegisterUserMutation();
 
-  const password = watch('password');
+  const password = watch("password");
 
   const onRegisterUserFormSubmit = (data: TRegisterUser) => {
     registerUser.mutate(data, {
       onSuccess: () => {
-        navigate('/chat/new');
+        navigate("/chat");
       },
       onError: (error) => {
         setError(true);
         if (error.response?.data?.message) {
           setErrorMessage(error.response?.data?.message);
         }
-      }
+      },
     });
   };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-white pt-6 sm:pt-0">
       <div className="mt-6 w-96 overflow-hidden bg-white px-6 py-4 sm:max-w-md sm:rounded-lg">
-        <h1 className="mb-4 text-center text-3xl font-semibold">Create your account</h1>
+        <h1 className="mb-4 text-center text-3xl font-semibold">
+          Create your account
+        </h1>
         {error && (
           <div
             className="relative mt-4 rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700"
             role="alert"
           >
-            There was an error attempting to register your account. Please try again. {errorMessage}
+            There was an error attempting to register your account. Please try
+            again. {errorMessage}
           </div>
         )}
         <form
@@ -69,16 +73,16 @@ function Registration() {
                   e.preventDefault();
                   return false;
                 }}
-                {...register('name', {
-                  required: 'Name is required',
+                {...register("name", {
+                  required: "Name is required",
                   minLength: {
                     value: 3,
-                    message: 'Name must be at least 3 characters'
+                    message: "Name must be at least 3 characters",
                   },
                   maxLength: {
                     value: 80,
-                    message: 'Name must be less than 80 characters'
-                  }
+                    message: "Name must be less than 80 characters",
+                  },
                 })}
                 aria-invalid={!!errors.name}
                 className="peer block w-full appearance-none rounded-t-md border-0 border-b-2 border-gray-300 bg-gray-50 px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-green-500 focus:outline-none focus:ring-0"
@@ -105,16 +109,16 @@ function Registration() {
                 type="text"
                 id="username"
                 aria-label="Username"
-                {...register('username', {
-                  required: 'Username is required',
+                {...register("username", {
+                  required: "Username is required",
                   minLength: {
                     value: 3,
-                    message: 'Username must be at least 3 characters'
+                    message: "Username must be at least 3 characters",
                   },
                   maxLength: {
                     value: 20,
-                    message: 'Username must be less than 20 characters'
-                  }
+                    message: "Username must be less than 20 characters",
+                  },
                 })}
                 aria-invalid={!!errors.username}
                 className="peer block w-full appearance-none rounded-t-md border-0 border-b-2 border-gray-300 bg-gray-50 px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-green-500 focus:outline-none focus:ring-0"
@@ -143,20 +147,20 @@ function Registration() {
                 id="email"
                 autoComplete="email"
                 aria-label="Email"
-                {...register('email', {
-                  required: 'Email is required',
+                {...register("email", {
+                  required: "Email is required",
                   minLength: {
                     value: 3,
-                    message: 'Email must be at least 6 characters'
+                    message: "Email must be at least 6 characters",
                   },
                   maxLength: {
                     value: 120,
-                    message: 'Email should not be longer than 120 characters'
+                    message: "Email should not be longer than 120 characters",
                   },
                   pattern: {
                     value: /\S+@\S+\.\S+/,
-                    message: 'You must enter a valid email address'
-                  }
+                    message: "You must enter a valid email address",
+                  },
                 })}
                 aria-invalid={!!errors.email}
                 className="peer block w-full appearance-none rounded-t-md border-0 border-b-2 border-gray-300 bg-gray-50 px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-green-500 focus:outline-none focus:ring-0"
@@ -183,16 +187,16 @@ function Registration() {
                 id="password"
                 autoComplete="current-password"
                 aria-label="Password"
-                {...register('password', {
-                  required: 'Password is required',
+                {...register("password", {
+                  required: "Password is required",
                   minLength: {
                     value: 8,
-                    message: 'Password must be at least 8 characters'
+                    message: "Password must be at least 8 characters",
                   },
                   maxLength: {
                     value: 40,
-                    message: 'Password must be less than 40 characters'
-                  }
+                    message: "Password must be less than 40 characters",
+                  },
                 })}
                 aria-invalid={!!errors.password}
                 className="peer block w-full appearance-none rounded-t-md border-0 border-b-2 border-gray-300 bg-gray-50 px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-green-500 focus:outline-none focus:ring-0"
@@ -224,8 +228,9 @@ function Registration() {
                   e.preventDefault();
                   return false;
                 }}
-                {...register('confirm_password', {
-                  validate: (value) => value === password || 'Passwords do not match'
+                {...register("confirm_password", {
+                  validate: (value) =>
+                    value === password || "Passwords do not match",
                 })}
                 aria-invalid={!!errors.confirm_password}
                 className="peer block w-full appearance-none rounded-t-md border-0 border-b-2 border-gray-300 bg-gray-50 px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-green-500 focus:outline-none focus:ring-0"
@@ -264,9 +269,12 @@ function Registration() {
           </div>
         </form>
         <p className="my-4 text-center text-sm font-light text-gray-700">
-          {' '}
-          Already have an account?{' '}
-          <a href="/login" className="p-1 font-medium text-green-500 hover:underline">
+          {" "}
+          Already have an account?{" "}
+          <a
+            href="/login"
+            className="p-1 font-medium text-green-500 hover:underline"
+          >
             Login
           </a>
         </p>

@@ -86,9 +86,9 @@ const useConversation = () => {
     console.log("123");
     switchToConversation(
       {
-        id: "new",
-        title: "New Chat",
-        ...template,
+        // id: "new",
+        // name: "New Chat",
+        // ...template,
       },
       []
     );

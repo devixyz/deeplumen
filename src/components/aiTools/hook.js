@@ -49,6 +49,10 @@ export const useChat = (prevChatList, stopChat, currentConversationId) => {
     });
   }, []);
 
+  useEffect(() => {
+    connversationId.current =
+      currentConversationId == "new" ? "" : currentConversationId;
+  }, [currentConversationId]);
 
   const handleGetAccessToken = useCallback(async (token) => {
     let res = await getAccessTokenAndStore(token);
@@ -159,7 +163,6 @@ export const useChat = (prevChatList, stopChat, currentConversationId) => {
         isAnswer: true,
       };
 
-
       handleResponding(true);
       hasStopResponded.current = false;
 
@@ -229,10 +232,7 @@ export const useChat = (prevChatList, stopChat, currentConversationId) => {
 
             if (onConversationComplete)
               onConversationComplete(connversationId.current);
-            console.log(
-              connversationId.current,
-              "connversationId.current"
-            )
+            console.log(connversationId.current, "connversationId.current");
             if (
               connversationId.current &&
               !hasStopResponded.current &&
@@ -247,8 +247,7 @@ export const useChat = (prevChatList, stopChat, currentConversationId) => {
               const newResponseItem = data.find(
                 (item) => item.id === responseItem.id
               );
-            
-              
+
               if (!newResponseItem) return;
 
               const newChatList = produce(chatListRef.current, (draft) => {
@@ -378,9 +377,16 @@ export const useChat = (prevChatList, stopChat, currentConversationId) => {
 
   // 监听 prevChatList 变化，并同步更新 chatList 和 chatListRef
   useEffect(() => {
-    if (prevChatList) {
+    if (prevChatList && prevChatList?.length > 0) {
+      console.log(prevChatList, "prevChatList");
+
       setChatList(prevChatList); // 更新 chatList
       chatListRef.current = prevChatList; // 同步更新 chatListRef
+    }
+
+    if (!connversationId.current) {
+      setChatList([]);
+      chatListRef.current = [];
     }
   }, [prevChatList]);
 

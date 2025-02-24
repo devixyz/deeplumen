@@ -1,41 +1,44 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { TLoginUser } from '~/data-provider';
-import { useAuthContext } from '~/hooks/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { TLoginUser } from "~/data-provider";
+import { useAuthContext } from "~/hooks/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const { login, error, isAuthenticated } = useAuthContext();
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm<TLoginUser>();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/chat/new');
+      navigate("/chat");
     }
   }, [isAuthenticated, navigate]);
 
   const SERVER_URL = import.meta.env.DEV
     ? import.meta.env.VITE_SERVER_URL_DEV
     : import.meta.env.VITE_SERVER_URL_PROD;
-  const showGoogleLogin = import.meta.env.VITE_SHOW_GOOGLE_LOGIN_OPTION === 'true';
+  const showGoogleLogin =
+    import.meta.env.VITE_SHOW_GOOGLE_LOGIN_OPTION === "true";
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-white pt-6 sm:pt-0">
       <div className="mt-6 w-96 overflow-hidden bg-white px-6 py-4 sm:max-w-md sm:rounded-lg">
-        <h1 className="mb-4 text-center text-3xl font-semibold">Welcome back</h1>
+        <h1 className="mb-4 text-center text-3xl font-semibold">
+          Welcome back
+        </h1>
         {error && (
           <div
             className="relative mt-4 rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700"
             role="alert"
           >
-            Unable to login with the information provided. Please check your credentials and try
-            again.
+            Unable to login with the information provided. Please check your
+            credentials and try again.
           </div>
         )}
         <form
@@ -51,20 +54,20 @@ function Login() {
                 id="email"
                 autoComplete="email"
                 aria-label="Email"
-                {...register('email', {
-                  required: 'Email is required',
+                {...register("email", {
+                  required: "Email is required",
                   minLength: {
                     value: 3,
-                    message: 'Email must be at least 6 characters'
+                    message: "Email must be at least 6 characters",
                   },
                   maxLength: {
                     value: 120,
-                    message: 'Email should not be longer than 120 characters'
+                    message: "Email should not be longer than 120 characters",
                   },
                   pattern: {
                     value: /\S+@\S+\.\S+/,
-                    message: 'You must enter a valid email address'
-                  }
+                    message: "You must enter a valid email address",
+                  },
                 })}
                 aria-invalid={!!errors.email}
                 className="peer block w-full appearance-none rounded-t-md border-0 border-b-2 border-gray-300 bg-gray-50 px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-green-500 focus:outline-none focus:ring-0"
@@ -91,16 +94,16 @@ function Login() {
                 id="password"
                 autoComplete="current-password"
                 aria-label="Password"
-                {...register('password', {
-                  required: 'Password is required',
+                {...register("password", {
+                  required: "Password is required",
                   minLength: {
                     value: 8,
-                    message: 'Password must be at least 8 characters'
+                    message: "Password must be at least 8 characters",
                   },
                   maxLength: {
                     value: 40,
-                    message: 'Password must be less than 40 characters'
-                  }
+                    message: "Password must be less than 40 characters",
+                  },
                 })}
                 aria-invalid={!!errors.password}
                 className="peer block w-full appearance-none rounded-t-md border-0 border-b-2 border-gray-300 bg-gray-50 px-2.5 pb-2.5 pt-5 text-sm text-gray-900 focus:border-green-500 focus:outline-none focus:ring-0"
@@ -121,7 +124,10 @@ function Login() {
               </span>
             )}
           </div>
-          <a href="/forgot-password" className="text-sm text-green-500 hover:underline">
+          <a
+            href="/forgot-password"
+            className="text-sm text-green-500 hover:underline"
+          >
             Forgot Password?
           </a>
           <div className="mt-6">
@@ -135,8 +141,8 @@ function Login() {
           </div>
         </form>
         <p className="my-4 text-center text-sm font-light text-gray-700">
-          {' '}
-          Don't have an account?{' '}
+          {" "}
+          Don't have an account?{" "}
           <a href="/register" className="p-1 text-green-500 hover:underline">
             Sign up
           </a>

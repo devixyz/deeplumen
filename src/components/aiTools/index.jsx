@@ -18,18 +18,6 @@ export default function ChatList({ appChatListData, currentConversationId }) {
   const scrollableRef = useRef(null);
   const messagesEndRef = useRef(null);
 
-  const _messagesTree = useRecoilValue(store.messages) || {};
-
-  console.log(_messagesTree, "_messagesTree");
-
-  const conversation = useRecoilValue(store.conversation) || {};
-  const { id: conversationId } = conversation;
-
-  const { screenshotTargetRef } = useScreenshot();
-
-  // const models = useRecoilValue(store.models) || [];
-  // const modelName = models.find(element => element.model == model)?.name;
-
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       const { scrollTop, scrollHeight, clientHeight } = scrollableRef.current;
