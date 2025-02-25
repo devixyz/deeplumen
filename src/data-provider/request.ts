@@ -1,6 +1,11 @@
+/*
+ * @Description:
+ * @Author: Devin
+ * @Date: 2025-02-24 09:50:29
+ */
 import axios, { AxiosRequestConfig } from "axios";
 
-const AUTH_HEADER = { Authorization: "Bearer app-t5KIHfOesIKgwVMrd65Pmnv6" };
+const AUTH_HEADER = { Authorization: "Bearer app-FROKn0KkcFfODwz3cChLnbco" };
 
 async function _get<T>(url: string, options?: AxiosRequestConfig): Promise<T> {
   const response = await axios.get(url, {
@@ -41,7 +46,7 @@ async function _put(url: string, data?: any) {
 }
 
 async function _delete<T>(url: string, data?: any): Promise<T> {
-  console.log(data,'dat')
+  console.log(data, "dat");
   const response = await axios.delete(url, {
     data: data,
     headers: { "Content-Type": "application/json", ...AUTH_HEADER },

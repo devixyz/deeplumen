@@ -19,7 +19,7 @@ const getAccessTokenAndStore = async (token) => {
   // let accessToken = await getChatAccessToken(token);
   // updateChatAccessToken(token, accessToken);
   // return accessToken;
-  return "app-t5KIHfOesIKgwVMrd65Pmnv6";
+  return "app-FROKn0KkcFfODwz3cChLnbco";
 };
 
 export const useChat = (prevChatList, stopChat, currentConversationId) => {

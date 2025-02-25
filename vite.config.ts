@@ -16,7 +16,7 @@ export default defineConfig({
     strictPort: false,
     proxy: {
       "/api/v1": {
-        target: "http://network.jancsitech.net:1510/",
+        target: "http://network.jancsitech.net:8085/",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

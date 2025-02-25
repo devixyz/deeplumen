@@ -40,81 +40,87 @@ const handleStream = (
   const reader = response.body?.getReader();
   const decoder = new TextDecoder("utf-8");
   let buffer = "";
-  let bufferObj;
   let isFirstMessage = true;
 
   function read() {
-    let hasError = false;
-    reader?.read().then((result) => {
-      console.log(result, "result");
-      if (result.done) {
-        onCompleted && onCompleted();
-        return;
-      }
-      buffer += decoder.decode(result.value, { stream: true });
-      const lines = buffer.split("\n");
-      console.log(lines, "lines");
-      try {
-        lines.forEach((message) => {
-          console.log(message, "message");
-          if (message) {
-            // check if it starts with data:
-            try {
-              bufferObj = JSON.parse(message.replace(/^data: /, ""));
-            } catch (e) {
-              // mute handle message cut off
-              onData("", isFirstMessage, {
-                conversationId: bufferObj?.conversation_id,
-                messageId: bufferObj?.message_id,
-              });
-              return;
-            }
-            if (bufferObj.status === 400 || !bufferObj.event) {
-              onData("", false, {
-                conversationId: undefined,
-                messageId: "",
-                errorMessage: bufferObj?.message,
-                errorCode: bufferObj?.code,
-              });
-              hasError = true;
-              onCompleted?.(true, bufferObj?.message);
-              return;
-            }
-            if (
-              bufferObj.event === "message" ||
-              bufferObj.event === "agent_message"
-            ) {
-              // can not use format here. Because message is splited.
-              onData(unicodeToChar(bufferObj.answer), isFirstMessage, {
-                conversationId: bufferObj.conversation_id,
-                taskId: bufferObj.task_id,
-                messageId: bufferObj.id,
-              });
-              isFirstMessage = false;
-            } else if (bufferObj.event === "message_file") {
-              onFile?.(bufferObj);
-            } else if (bufferObj.event === "message_end") {
-              onMessageEnd?.(bufferObj);
-            } else if (bufferObj.event === "message_replace") {
-              onMessageReplace?.(bufferObj);
-            }
+    reader
+      ?.read()
+      .then((result) => {
+        if (result.done) {
+          onCompleted && onCompleted();
+          return;
+        }
+
+        buffer += decoder.decode(result.value, { stream: true });
+        const lines = buffer.split("\n");
+
+        lines.slice(0, -1).forEach((message) => {
+          if (message.trim()) {
+            processMessage(message);
           }
         });
+
         buffer = lines[lines.length - 1];
-      } catch (e) {
-        onData("", false, {
-          conversationId: undefined,
-          messageId: "",
-          errorMessage: `${e}`,
-        });
-        hasError = true;
-        onCompleted?.(true, e.toString());
-        return;
-      }
-      console.log(buffer, "buffer");
-      if (!hasError) read();
-    });
+        read();
+      })
+      .catch((error) => {
+        handleError(error);
+      });
   }
+
+  function processMessage(message) {
+    try {
+      const bufferObj = JSON.parse(message.replace(/^data: /, ""));
+      handleEvent(bufferObj);
+    } catch (e) {
+      handleError(e, bufferObj);
+    }
+  }
+
+  function handleEvent(bufferObj) {
+    if (bufferObj.status === 400 || !bufferObj.event) {
+      onData("", false, {
+        conversationId: undefined,
+        messageId: "",
+        errorMessage: bufferObj?.message,
+        errorCode: bufferObj?.code,
+      });
+      onCompleted?.(true, bufferObj?.message);
+      return;
+    }
+
+    switch (bufferObj.event) {
+      case "message":
+      case "agent_message":
+        onData(unicodeToChar(bufferObj.answer), isFirstMessage, {
+          conversationId: bufferObj.conversation_id,
+          taskId: bufferObj.task_id,
+          messageId: bufferObj.id,
+        });
+        isFirstMessage = false;
+        break;
+      case "message_file":
+        onFile?.(bufferObj);
+        break;
+      case "message_end":
+        onMessageEnd?.(bufferObj);
+        break;
+      case "message_replace":
+        onMessageReplace?.(bufferObj);
+        break;
+    }
+  }
+
+  function handleError(error, bufferObj = {}) {
+    console.error("Error processing stream:", error);
+    onData("", false, {
+      conversationId: undefined,
+      messageId: "",
+      errorMessage: `${error}`,
+    });
+    onCompleted?.(true, error.toString());
+  }
+
   read();
 };
 
