@@ -50,7 +50,10 @@ const handleStream = (
           onCompleted && onCompleted();
           return;
         }
-
+        console.log(
+          decoder.decode(result.value, { stream: true }),
+          "result.value"
+        );
         buffer += decoder.decode(result.value, { stream: true });
         const lines = buffer.split("\n");
         console.log(lines, "lines");
@@ -117,7 +120,7 @@ const handleStream = (
     }
   }
 
-  function handleError(error, bufferObj = {}) {
+  function handleError(error) {
     console.error("Error processing stream:", error);
     onData("", false, {
       conversationId: undefined,
