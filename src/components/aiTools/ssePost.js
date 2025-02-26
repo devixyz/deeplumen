@@ -53,6 +53,7 @@ const handleStream = (
 
         buffer += decoder.decode(result.value, { stream: true });
         const lines = buffer.split("\n");
+        console.log(lines, "lines");
 
         lines.slice(0, -1).forEach((message) => {
           if (message.trim()) {
@@ -70,10 +71,15 @@ const handleStream = (
 
   function processMessage(message) {
     try {
-      const bufferObj = JSON.parse(message.replace(/^data: /, ""));
-      handleEvent(bufferObj);
+      if (!message.startsWith("data: ")) {
+        console.log(message, "!message.startsWith:message");
+      } else {
+        console.log(message, "message");
+        const bufferObj = JSON.parse(message.replace(/^data: /, ""));
+        handleEvent(bufferObj);
+      }
     } catch (e) {
-      handleError(e, bufferObj);
+      handleError(e);
     }
   }
 

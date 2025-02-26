@@ -109,7 +109,8 @@ const Chat = ({
       const data = {
         query: message,
         inputs: newConversationInputs || {},
-        conversation_id: newConversationId,
+        conversation_id:
+          newConversationId == "000-000" ? "" : newConversationId,
         response_mode: "streaming",
         user: "abc-123",
       };

@@ -170,7 +170,7 @@ export const useChat = (prevChatList, stopChat, currentConversationId) => {
 
       const bodyParams = {
         response_mode: "streaming",
-        conversation_id: connversationId.current,
+        // conversation_id: connversationId.current,
         ...data,
       };
       if (bodyParams?.files?.length) {
