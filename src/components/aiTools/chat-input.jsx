@@ -238,7 +238,7 @@ const ChatInput = forwardRef(
             />
             {isResponding && (
               <div
-                className={`absolute pl-1 top-0 bottom-0 flex items-center left-36`}
+                className={`absolute pl-1 top-0 bottom-0 flex items-center`}
                 // visionConfig?.enabled ? "left-20" : "left-12"
               >
                 {/* <span className="mr-1 font-math">Thinking</span> */}
