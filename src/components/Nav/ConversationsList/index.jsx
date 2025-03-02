@@ -22,7 +22,7 @@ const ChatSections = ({
         conversationId={conversationId}
         moveToTop={moveToTop}
       />
-      <Section
+      {/* <Section
         title="Shared Chats"
         chats={sharedChats}
         isLoading={isLoading}
@@ -39,7 +39,7 @@ const ChatSections = ({
         conversationId={conversationId}
         moveToTop={moveToTop}
         isNotClick={true}
-      />
+      /> */}
     </div>
   );
 };
@@ -54,7 +54,7 @@ const Section = ({
   isNotClick,
 }) => (
   <div
-    className={`flex-1 flex flex-col justify-start mb-2 h-[25%] ${title == "My Chats" && "h-[45%]"}`}
+    className={`flex-1 flex flex-col justify-start mb-2 h-[25%] ${title == "My Chats" && "h-full"}`}
   >
     <h2 className="relative font-bold text-[1.2rem] p-2 pb-4 text-black dark:text-white text-center">
       {title}

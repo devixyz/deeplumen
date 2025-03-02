@@ -155,9 +155,7 @@ const ChatInput = forwardRef(
       <>
         <div className="relative w-full">
           <div
-            className={`relative p-[5.5px]  bg-[#f7f9fb] dark:bg-[#2f2f2f]  rounded-xl overflow-y-auto 
-            ${"isDragActive" && "border-primary-600  mb-4"}
-          `}
+            className={`relative p-[5.5px]  bg-[#f7f9fb] dark:bg-[#2f2f2f]  rounded-xl overflow-y-auto  ${"isDragActive" && "border-primary-600  mb-4"}`}
           >
             {/* {needNewChat && (
               <div
@@ -203,7 +201,7 @@ const ChatInput = forwardRef(
                 </div>
               </>
             )} */}
-            <>
+            {/* <>
               <div className="absolute bottom-[7px] left-4 flex items-center h-8">
                 <div className="group flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 cursor-pointer  dark:text-white">
                   <SearchIcon />
@@ -218,12 +216,12 @@ const ChatInput = forwardRef(
                   <O1Icon />
                 </div>
               </div>
-            </>
+            </> */}
             <Textarea
               className={`
               flex-1 block w-full px-2 pr-[118px] py-[7px] leading-5 text-sm text-gray-700 font-[auto] dark:text-white bg-[#F7F9FB] dark:bg-[#2f2f2f]
-              pl-36 max-h-[120px]  overflow-y-auto
-            `}
+               max-h-[120px]  overflow-y-auto
+            `} //pl-36
               // ${visionConfig?.enabled ? "pl-20" : "pl-12"}
               value={query}
               onChange={handleContentChange}

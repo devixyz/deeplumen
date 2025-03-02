@@ -45,7 +45,9 @@ const Answer = ({ item, answerIcon, responding, chatAnswerContainerInner }) => {
         ref={containerRef}
       >
         {content && (
-          <div className={`group relative pr-10 ${chatAnswerContainerInner}`}>
+          <div
+            className={`group relative sm:pr-10 ${chatAnswerContainerInner}`}
+          >
             <div
               ref={contentRef}
               className={`

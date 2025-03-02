@@ -15,7 +15,7 @@ const Question = ({ item, questionIcon }) => {
     ? message_files.map((item) => item.url)
     : [];
   return (
-    <div className="flex justify-end mb-2 last:mb-0 pl-10">
+    <div className="flex justify-end mb-2 last:mb-0 sm:pl-10">
       <div className="group relative mr-4 w-max-[90%]">
         <div
           className={"absolute flex justify-end gap-1 -top-4 right-6"}

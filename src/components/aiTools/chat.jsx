@@ -209,7 +209,7 @@ const Chat = ({
         ref={chatFooterRef}
       >
         <div
-          className={`${chatFooterInnerClassName} mt-16 sm:mt-6  w-3/4 sm:w-2/3`}
+          className={`${chatFooterInnerClassName} mt-16 sm:mt-6 w-[90%] sm:w-2/3`}
         >
           {/* {!noStopResponding && isResponding && (
             <div className="flex justify-center mb-2">

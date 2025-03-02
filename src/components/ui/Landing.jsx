@@ -36,16 +36,16 @@ export default function Landing() {
 
   return (
     <div className="flex h-full flex-col items-center overflow-y-auto pt-0 text-sm dark:bg-gray-900">
-      <div className="w-full px-6 text-gray-900 dark:text-gray-100 md:flex md:max-w-2xl md:flex-col lg:max-w-3xl">
+      <div className="h-full w-full px-6 text-gray-900 dark:text-gray-100 md:flex md:max-w-2xl md:flex-col lg:max-w-3xl flex justify-center items-center">
         <h1
           id="landing-title"
           // className="mb-10 ml-auto mr-auto mt-6 flex items-center justify-center gap-2 text-center text-4xl font-semibold sm:mb-16 md:mt-[10vh]"
-          className="flex items-center justify-center w-[24rem] w-[24rem] mb-8 ml-auto mr-auto mt-6 font-semibold  md:mt-[6vh]"
+          className="flex items-center justify-center w-[24rem] mb-8 ml-auto mr-auto mt-6 font-semibold  md:mt-[6vh]"
         >
           <img src={LandingPng} alt="Landing" />
           {/* {import.meta.env.VITE_APP_TITLE || 'DeepLumen'} */}
         </h1>
-        <div className="items-start gap-3.5 text-center md:flex">
+        {/* <div className="items-start gap-3.5 text-center md:flex">
           <div className="mb-8 flex flex-1 flex-col gap-3.5 md:mb-auto">
             <h2 className="m-auto flex items-center gap-3 text-lg font-normal md:flex-col md:gap-2">
               <HotTopicsIcon />
@@ -109,7 +109,7 @@ export default function Landing() {
               </li>
             </ul>
           </div>
-        </div>
+        </div> */}
         {/* {!showingTemplates && (
           <div className="mt-8 mb-4 flex flex-col items-center gap-3.5 md:mt-16">
             <button

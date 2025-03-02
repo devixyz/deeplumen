@@ -125,7 +125,8 @@ export default function Nav({ navVisible, setNavVisible }) {
     <>
       <div
         className={
-          "nav dark:bg-gray-900 md:inset-y-0" + (navVisible ? " active" : "")
+          "nav  bg-white  dark:bg-gray-900 md:inset-y-0" +
+          (navVisible ? " active" : "")
         }
       >
         <div className="flex h-full min-h-0 flex-col ">
@@ -195,10 +196,7 @@ export default function Nav({ navVisible, setNavVisible }) {
       )}
 
       <div
-        className={
-          "nav-mask bg-white dark:bg-[#565869bf]" +
-          (navVisible ? " active" : "")
-        }
+        className={"nav-mask " + (navVisible ? " active" : "")}
         onClick={toggleNavVisible}
       ></div>
     </>
