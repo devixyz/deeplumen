@@ -29,6 +29,10 @@ module.exports = {
           to: { height: 0 }
         }
       },
+      backgroundImage: {
+        'light-gradient': "linear-gradient(0deg, #F9FAFB 40%, rgba(255, 255, 255, 0.00) 100%)",
+        'dark-gradient': "linear-gradient(0deg, #1A1A1A 40%, rgba(0, 0, 0, 0.00) 100%)",
+      },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out'

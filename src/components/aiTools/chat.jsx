@@ -76,6 +76,7 @@ const Chat = ({
         for (const entry of entries) {
           const { blockSize } = entry.borderBoxSize[0];
 
+          chatContainerRef.current.style.paddingBottom = `${blockSize + 10}px`;
           handleScrolltoBottom();
         }
       });
@@ -159,14 +160,10 @@ const Chat = ({
   };
 
   return (
-    <div className="relative h-full w-full m-auto overflow-hidden mb-2">
-      <div className="h-10 sm:block hidden"></div>
+    <div className="relative h-full w-full m-auto overflow-hidden ">
       <div
         ref={chatContainerRef}
-        className={`relative overflow-y-auto sm:p-8 ${conversationId === "" && "sm:pt-0"}`}
-        style={{
-          height: "calc(100% - 10.5rem)",
-        }}
+        className={`relative h-full overflow-y-auto sm:p-8 ${conversationId === "" && "sm:pt-0"}`}
       >
         {!conversationId || conversationId === "" ? (
           <Landing />
@@ -203,13 +200,13 @@ const Chat = ({
       </div>
       {/* <div className="group h-24 w-full flex-shrink-0 dark:border-gray-900/50 dark:bg-gray-900 md:h-32" /> */}
       <div
-        className={`flex justify-center h-[8rem] md:h-40 ${
+        className={`absolute bottom-0 pb-[10px] w-full bg-light-gradient dark:bg-dark-gradient ${
           !noStopResponding && chatFooterClassName
         }`}
         ref={chatFooterRef}
       >
         <div
-          className={`${chatFooterInnerClassName} mt-16 sm:mt-6 w-[90%] sm:w-2/3`}
+          className={`${chatFooterInnerClassName} mx-auto w-full max-w-full px-8 mt-2 sm:px-16`}
         >
           {/* {!noStopResponding && isResponding && (
             <div className="flex justify-center mb-2">
